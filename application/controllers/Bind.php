@@ -18,8 +18,7 @@ class Bind extends CI_Controller{
         $this->load->library('CI_Wechat');
         $this->load->model('Wxuserinfo_model');
         $this->load->model('Sysconfig_model');
-        echo $this->session->openid;
-        exit;
+
 
     }
 
