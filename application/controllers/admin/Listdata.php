@@ -38,7 +38,7 @@ class Listdata extends CI_Controller
     }
 
     /**
-     *后台管理登录判断
+     *罗列已绑定人员信息
      */
     public function listuserinfo($page = 1)
     {
@@ -50,6 +50,11 @@ class Listdata extends CI_Controller
                 $data['listuserinfo'][$i]['state']=$this->Wxnetinfo_model->getstate($data['listuserinfo'][$i]['U_openid'])['N_state'];
             }
             $data['count'] = $this->Wxuserinfo_model->listuserinfocount();
+            if($data['count'])
+            {
+                $this->load->view('admin/index');
+                exit;
+            }
             $data['curr'] = $page;
             $this->load->view('admin/bindeduser', $data);
         }
