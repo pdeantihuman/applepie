@@ -20,7 +20,7 @@ class Bind extends CI_Controller{
         $this->load->model('Sysconfig_model');
 
 
-    }
+    }//....
 
     /**
      * @return bool
