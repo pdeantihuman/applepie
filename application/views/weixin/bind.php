@@ -53,16 +53,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="mui-content">
     <form class="mui-input-group">
         <div class="mui-input-row">
-            <label>姓名</label>
-            <input id='uname' type="text" class="mui-input-clear mui-input" placeholder="请输入姓名">
-        </div>
-        <div class="mui-input-row">
             <label>学号</label>
             <input id='schoolcar' type="number" class="mui-input-clear mui-input" placeholder="请输入学号">
         </div>
         <div class="mui-input-row">
             <label>身份证</label>
             <input id='card' type="text" class="mui-input-clear mui-input" placeholder="输入身份证号(尾号X大写)">
+        </div>
+        <div class="mui-input-row">
+            <label>姓名</label>
+            <input id='uname' type="text" class="mui-input-clear mui-input" placeholder="请输入姓名">
         </div>
         <div class="mui-input-row">
             <label>手机号</label>

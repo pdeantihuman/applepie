@@ -97,8 +97,8 @@ class BindApi extends CI_Controller
         if(!$this->Wxverification_model->getuserinfo($data['U_number'],$data['U_card'])){
             $return=[
                 'state'=> 'error',
-//                'message' =>'系统没有你的信息'
-                'message' =>$data['U_card']
+                'message' =>'系统没有你的信息',
+                //'message' =>$data['U_card']
             ];
             echo json_encode($return);
             exit;
