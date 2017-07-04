@@ -44,6 +44,11 @@ class Wxuserinfo_model extends CI_Model
      */
     public function del($Uid){
         $this->db->where('Uid',$Uid);
+        $row = $this->db->get('userinfo')->row_array();
+        $this->db->set('V_state',1);
+        $this->db->where('V_card',$row['U_card']);
+        $this->db->update('verification');
+        $this->db->where('Uid',$Uid);
         $return = $this->db->delete('userinfo');
         if ($return){
             return true;
