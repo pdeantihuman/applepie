@@ -133,10 +133,10 @@ class Wxfixorder_model extends CI_Model
     /**
      * @param $state
      * @param $page
-     * @return bool
+     * @return mixed
      * 根据状态和页数查看订单数据列表
      */
-    public function getfixlistbystatepage($state, $page){
+    public function getFixOrderListByStateAndPage($state, $page){
         $this->db->order_by('Fo_time','DESC');
         $this->db->limit(10,($page-1)*10);
         $this->db->where('Fo_state',$state);

@@ -150,7 +150,7 @@ class Fix extends CI_Controller
             echo '已经处理过了';
             exit;
         }
-        $data['fixuser']=$this->Wxfixuser_model->getallfixusername();
+        $data['fixUser']=$this->Wxfixuser_model->getallfixusername();
         $data['info']=$this->Wxfixorder_model->getfixlistbyid($id,$this->Wxfixorder_model->getfixopenidbyid($id));
         if(!$data['info']){
             show_404();
@@ -210,7 +210,7 @@ class Fix extends CI_Controller
                 echo json_encode($return);
                 break;
             case 'addfix':
-                if($this->Wxfixorder_model->getLatestOrderByOpenId($this->session->openid)){
+                if($this->Wxfixorder_model->getLatestOrderStateByOpenId($this->session->openid)){
                     $data =[
                         'Fo_openid' => $this->session->openid,
                         'Fo_type' => $this->input->post('type'),
@@ -246,7 +246,7 @@ class Fix extends CI_Controller
                 }else{
                     $data = [
                         'Fof_foid' => $id,
-                        'Fof_fuopenid' =>$this->Wxfixuser_model->getopenidbyname($this->input->post('fixname')),
+                        'Fof_fuopenid' =>$this->Wxfixuser_model->getOpenIdByName($this->input->post('fixname')),
                         'Fof_time' =>time(),
                         'Fof_message'=>$this->input->post('message'),
                         'Fof_state' =>1

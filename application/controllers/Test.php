@@ -88,7 +88,7 @@ class Test extends CI_Controller
 //        print_r($menu);
 //        echo $this->Wxfixuser_model->getfixuseopenidbyfuid(1);
 
-//        print_r($this->Wxfixorder_model->getfixlistbystatepage('3',2));
+//        print_r($this->Wxfixorder_model->getFixOrderListByStateAndPage('3',2));
 
 //        print_r($this->Wxfixorder_model->getfixopenidbyid('1'));
 //        print_r($this->Wxfixorder_model->getfixinfobyid('1'));

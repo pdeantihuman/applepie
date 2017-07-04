@@ -33,6 +33,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <tbody>
 
     <?php foreach ($list as $data): ?>
+        <?php if ($count==0) break;?>
         <tr>
             <td><?php echo $data['userinfo']['U_dormitory'];?></td>
             <td><?php echo $data['userinfo']['U_name'];?></td>
@@ -55,7 +56,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         var laypage=layui.laypage;
         laypage({
             cont: 'demo1'
-            ,pages: <?php echo ceil($count/10);?> //总页数
+            ,pages: <?php if($count==0)echo 1;else echo ceil($count/10);?> //总页数
             ,groups: 5 //连续显示分页数
             ,curr: <?php echo $curr;?>
             ,jump: function(e, first){ //触发分页后的回调

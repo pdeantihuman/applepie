@@ -21,30 +21,55 @@ class Wxfixuser_model extends CI_Model
      */
     public function getallfixusername(){
         $this->db->select('Fu_name');
-        return $this->db->get('fixuser')->result_array();
+        return $this->db->get('fixUser')->result_array();
     }
     public function getallfixuserinfo(){
-        return $this->db->get('fixuser')->result_array();
-    }
-    public function getfixusernamebyopenid($openid){
-        $this->db->where('Fu_openid',$openid);
-        $this->db->select('Fu_name');
-        return $this->db->get('fixuser')->row_array()['Fu_name'];
-    }
-    public function getopenidbyname($name){
-        $this->db->where('Fu_name',$name);
-        $this->db->select('Fu_openid');
-        return $this->db->get('fixuser')->row_array()['Fu_openid'];
-    }
-    public function getfixuseopenidbyfuid($fuid){
-        $this->db->where('Fuid',$fuid);
-        $this->db->select('Fu_openid');
-        return $this->db->get('fixuser')->row_array()['Fu_openid'];
+        return $this->db->get('fixUser')->result_array();
     }
 
+
+    /**
+     * 通过维修人员openid获取维修人员姓名
+     * @param $openid
+     * @return mixed
+     */
+    public function getNameByOpenId ($openid){
+        $this->db->where('Fu_openid',$openid);
+        return $this->db->get('fixUser')->row_array()['Fu_name'];
+    }
+
+
+    /**
+     * 通过维修人员姓名获取维修人员openid
+     * @param $name
+     * @return mixed
+     */
+    public function getOpenIdByName($name){
+        $this->db->where('Fu_name',$name);
+        $this->db->select('Fu_openid');
+        return $this->db->get('fixUser')->row_array()['Fu_openid'];
+    }
+
+
+    /**
+     * 通过fuid获取维修人员openid
+     * @param $fuid
+     * @return mixed
+     */
+    public function getOpenIdById($fuid){
+        $this->db->where('Fuid',$fuid);
+        $this->db->select('Fu_openid');
+        return $this->db->get('fixUser')->row_array()['Fu_openid'];
+    }
+
+    /**
+     * @param $openid
+     * @return bool
+     * 判断该openid是否为维修人员
+     */
     public function checkFixUserByOpenId($openid){
         $this->db->where('Fu_openid',$openid);
-        return $this->db->get('fixuser')->num_rows()>0;
+        return $this->db->get('fixUser')->num_rows()>0;
     }
 
 }

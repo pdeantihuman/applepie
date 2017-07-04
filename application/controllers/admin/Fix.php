@@ -82,7 +82,7 @@ class Fix extends CI_Controller
         if($this->check_is_adminer()){
             exit;
         }else{
-            $data['list'] = $this->Wxfixorder_model->getfixlistbystatepage('3',$page);
+            $data['list'] = $this->Wxfixorder_model->getFixOrderListByStateAndPage('3',$page);
             $data['count']=$this->Wxfixorder_model->count('3');
             $data['curr']=$page;
             for($i=0;$i<count($data['list']);$i++){
@@ -167,7 +167,7 @@ class Fix extends CI_Controller
             $Foid=$this->input->post('fid');
             $data = [
                 'Fof_foid' => $Foid,
-                'Fof_fuopenid' =>$this->Wxfixuser_model->getfixuseopenidbyfuid($Fuid),
+                'Fof_fuopenid' =>$this->Wxfixuser_model->getOpenIdById($Fuid),
                 'Fof_time' =>time(),
                 'Fof_message'=>'管理员分配维修人员',
                 'Fof_state' =>1,
