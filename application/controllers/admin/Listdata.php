@@ -133,7 +133,7 @@ class Listdata extends CI_Controller
             $data['garde15']=$this->Wxuserinfo_model->countGrade('15');
             $data['garde16']=$this->Wxuserinfo_model->countGrade('16');
             $data['nobinded']=$this->Wxverification_model->countstate('1');
-            $data['binded']=$this->Wxverification_model->countstate('2');
+            $data['binded']=$this->Wxuserinfo_model->listuserinfocount();
             $this->load->view('admin/statistics',$data);
         }
 
