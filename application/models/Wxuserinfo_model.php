@@ -55,7 +55,7 @@ class Wxuserinfo_model extends CI_Model
 
     /**
      * @param $page
-     * @return bool
+     * @return array
      * 按照页数查看用户信息列表
      */
     public function listuserinfo($page){
@@ -67,7 +67,7 @@ class Wxuserinfo_model extends CI_Model
         if($return){
             return $return;
         }else{
-            return false;
+            return array();
         }
     }
 
@@ -80,7 +80,7 @@ class Wxuserinfo_model extends CI_Model
         if($return){
             return $return;
         }else{
-            return false;
+            return 0;
         }
     }
 

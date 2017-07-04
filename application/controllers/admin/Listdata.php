@@ -50,11 +50,11 @@ class Listdata extends CI_Controller
                 $data['listuserinfo'][$i]['state']=$this->Wxnetinfo_model->getstate($data['listuserinfo'][$i]['U_openid'])['N_state'];
             }
             $data['count'] = $this->Wxuserinfo_model->listuserinfocount();
-            if($data['count'])
-            {
-                $this->load->view('admin/index');
-                exit;
-            }
+//            if($data['count']==0)
+//            {
+//                $this->load->view('admin/index');
+//                exit;
+//            }
             $data['curr'] = $page;
             $this->load->view('admin/bindeduser', $data);
         }
