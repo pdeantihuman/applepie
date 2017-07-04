@@ -20,12 +20,11 @@ class Wxfixorder_model extends CI_Model
      * @return bool
      * 获取当前用户的最新一条报修记录的状态信息
      */
-    public function getNewestorder($openid){
+    public function getLatestOrderStateByOpenId($openid){
         $this->db->where('Fo_openid', $openid);
-        $this->db->order_by('Foid','DESC');
-        $this->db->limit(1);
+        $this->db->order_by('Fo_time','DESC');
         $this->db->select('Fo_state');
-        $result = $this->db->get('fixorder')->row_array()['Fo_state'];
+        $result = $this->db->get('fixOrder')->first_row()['Fo_state'];
         return $result != 3 ? (is_null($result) ? true : (false)) : (is_null($result) ? true : (true));
     }
 
@@ -35,7 +34,7 @@ class Wxfixorder_model extends CI_Model
      * 添加一条报修信息
      */
     public function add($data){
-        $return = $this->db->insert('fixorder',$data);
+        $return = $this->db->insert('fixOrder',$data);
         return $return ? true : false;
     }
 
@@ -50,7 +49,7 @@ class Wxfixorder_model extends CI_Model
         $this->db->order_by('Foid','DESC');
         $this->db->limit(1);
         $this->db->select('Fo_time,Fo_type,Fo_state,Fo_content');
-        $result = $this->db->get('fixorder')->row_array();
+        $result = $this->db->get('fixOrder')->row_array();
         return $result;
 
     }
@@ -61,7 +60,7 @@ class Wxfixorder_model extends CI_Model
         $this->db->where('Fo_openid',$openid);
         $this->db->order_by('Foid','DESC');
         $this->db->select('Fo_time,Fo_state,Foid');
-        $result = $this->db->get('fixorder')->result_array();
+        $result = $this->db->get('fixOrder')->result_array();
         return $result;
     }
 
@@ -74,7 +73,7 @@ class Wxfixorder_model extends CI_Model
         $this->db->where('Foid',$id);
         $this->db->where('Fo_openid',$openid);
         $this->db->select('Fo_time,Fo_type,Fo_state,Fo_content');
-        $result = $this->db->get('fixorder')->row_array();
+        $result = $this->db->get('fixOrder')->row_array();
         return $result ? $result : false;
     }
 
@@ -86,7 +85,7 @@ class Wxfixorder_model extends CI_Model
     public function getfixopenidbyid($id){
         $this->db->where('Foid',$id);
         $this->db->select('Fo_openid');
-        $result=$this->db->get('fixorder')->row_array()['Fo_openid'];
+        $result=$this->db->get('fixOrder')->row_array()['Fo_openid'];
         return $result ? $result : false;
     }
 
@@ -97,7 +96,7 @@ class Wxfixorder_model extends CI_Model
      */
     public function getfixinfobyid($id){
         $this->db->where('Foid',$id);
-        $result=$this->db->get('fixorder')->row_array();
+        $result=$this->db->get('fixOrder')->row_array();
         return $result ? $result : false;
     }
 
@@ -111,7 +110,7 @@ class Wxfixorder_model extends CI_Model
         $data = [
             'Fo_state' => $state
         ];
-        $this->db->update('fixorder',$data);
+        $this->db->update('fixOrder',$data);
     }
 
     /**
@@ -122,7 +121,7 @@ class Wxfixorder_model extends CI_Model
     public function getfixlistbystate($state){
         $this->db->order_by('Fo_time','DESC');
         $this->db->where('Fo_state',$state);
-        $data = $this->db->get('fixorder')->result_array();
+        $data = $this->db->get('fixOrder')->result_array();
         if($data){
             return $data;
         }else{
@@ -141,7 +140,7 @@ class Wxfixorder_model extends CI_Model
         $this->db->order_by('Fo_time','DESC');
         $this->db->limit(10,($page-1)*10);
         $this->db->where('Fo_state',$state);
-        $data = $this->db->get('fixorder')->result_array();
+        $data = $this->db->get('fixOrder')->result_array();
         if($data){
             return $data;
         }else{
@@ -156,7 +155,7 @@ class Wxfixorder_model extends CI_Model
      */
     public function count($state){
         $this->db->where('Fo_state',$state);
-        $return = $this->db->count_all_results('fixorder');
+        $return = $this->db->count_all_results('fixOrder');
         if($return){
             return $return;
         }else{
@@ -171,7 +170,7 @@ class Wxfixorder_model extends CI_Model
      */
     public function del($Foid){
         $this->db->where('Foid',$Foid);
-        $return = $this->db->delete('fixorder');
+        $return = $this->db->delete('fixOrder');
         if ($return){
             return true;
         }else{

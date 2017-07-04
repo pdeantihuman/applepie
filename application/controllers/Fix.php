@@ -189,7 +189,7 @@ class Fix extends CI_Controller
                         'state'=> 'error',
                         'message' =>'你没有申请开通网络，不可进行报修操作'
                     ];
-                }elseif($this->Wxfixorder_model->getNewestorder($this->session->openid)){
+                }elseif($this->Wxfixorder_model->getLatestOrderByOpenId($this->session->openid)){
                     $return=[
                         'state'=> 'success',
                         'link' =>'/fix/addfix'
@@ -210,12 +210,11 @@ class Fix extends CI_Controller
                 echo json_encode($return);
                 break;
             case 'addfix':
-                if($this->Wxfixorder_model->getNewestorder($this->session->openid)){
+                if($this->Wxfixorder_model->getLatestOrderByOpenId($this->session->openid)){
                     $data =[
                         'Fo_openid' => $this->session->openid,
                         'Fo_type' => $this->input->post('type'),
                         'Fo_content' => $this->input->post('content'),
-                        'Fo_time'=>time(),
                         'Fo_state' => '1'
                     ];
                     if($this->Wxfixorder_model->add($data)){
