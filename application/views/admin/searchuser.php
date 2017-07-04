@@ -33,7 +33,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <button onclick="search()" class="layui-btn mgl-20">查询</button>
     </span>
 </div>
-
+<?php if ($userinfo){
+    echo "没有该用户数据";
+    exit;
+}?>
 <table id="dateTable" class="layui-table">
     <thead>
     <tr>

@@ -37,19 +37,18 @@ class Search extends CI_Controller
         $number = $this->uri->segment(4, 0);
         if ($this->check_is_adminer()) {
             exit;
-        } else {
-            if($number == "0"){
-                show_404();
-                exit;
-            }
+        }// else {
+//            if($number == "0"){//TODO:假如用户输入的数据错误，应该显示提示信息，而不是转404
+//                show_404();
+//                exit;
+//            }
             $return=$this->Wxuserinfo_model->searchbynumber($number);
-            if(!$return){
-                show_404();
-                exit;
-            }
+//            if(!$return){
+ //               show_404();TODO:假如用户没有查询到数据，应该显示提示信息，而不是转404
+//                exit;
+//            }
             $data['userinfo']=$return;
             $data['userinfo']['state']=$this->Wxnetinfo_model->getstate($data['userinfo']['U_openid'])['N_state'];
             $this->load->view('admin/searchuser',$data);
         }
     }
-}
