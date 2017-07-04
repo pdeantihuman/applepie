@@ -56,7 +56,9 @@ class Fix extends CI_Controller
         }
     }
 
-
+    private function isFixUserByOpenId(){
+        return $this->Wxfixuser_model->checkFixUserByOpenId($this->session->openid);
+    }
 
     /**
      *报修主界面
@@ -66,7 +68,10 @@ class Fix extends CI_Controller
             exit;
         }
         if($this->_checkuser()){
-            $this->load->view('weixin/netfix');
+            if ($this->isFixUserByOpenId())
+                show_404(); // TODO:  需要一个维修人员的页面
+            else
+                $this->load->view('weixin/netfix');
         }else{
             $url=$this->ci_wechat->getOauthRedirect("http://weixin.smell.ren/bind");
             header("location:$url");

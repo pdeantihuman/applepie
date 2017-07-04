@@ -42,4 +42,9 @@ class Wxfixuser_model extends CI_Model
         return $this->db->get('fixuser')->row_array()['Fu_openid'];
     }
 
+    public function checkFixUserByOpenId($openid){
+        $this->db->where('Fu_openid',$openid);
+        return $this->db->get('fixuser')->num_rows()>0;
+    }
+
 }
