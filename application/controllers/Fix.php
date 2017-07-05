@@ -74,7 +74,7 @@ class Fix extends CI_Controller
         }
         if($this->_checkuser()){
             if ($this->isFixUser())
-                show_404(); // TODO:  需要一个维修人员的页面
+                $this->load->view('weixin/fixinfoforfix'); // TODO:  需要一个维修人员的页面
             else
                 $this->load->view('weixin/netfix');
         }else{
