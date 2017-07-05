@@ -81,7 +81,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <td><?php echo $data['U_phone'];?></td>
         <td><?php
             switch ($data['state']){
-                case 1:
+                case 4:
                     echo '已提交申请';
                     break;
                 case 2:

@@ -57,8 +57,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <dd class="layui-nav-item"><a href="javascript:;" href-url="/admin/fix/nothandlelist"><i class="layui-icon">&#xe60e;</i>待处理</a></dd>
                         <dd class="layui-nav-item"><a href="javascript:;" href-url="/admin/fix/handleinglist"><i class="layui-icon">&#xe60e;</i>处理中</a></dd>
                         <dd class="layui-nav-item"><a href="javascript:;" href-url="/admin/fix/handleedlist"><i class="layui-icon">&#x1005;</i>已完成</a></dd>
-                        <dd class="layui-nav-item"><a href="javascript:;" href-url="http://www.baidu.com"><i class="layui-icon">&#xe612;</i>人员管理</a></dd>
-                    </dl>
+                        <dd class="layui-nav-item"><a href="javascript:;" href-url="http://www.taobao.com"><i class="layui-icon">&#xe612;</i>人员管理</a></dd>
+                    </dl><!--//TODO:需要一个页面-->
                 </li>
 
                 <li class="layui-nav-item">
