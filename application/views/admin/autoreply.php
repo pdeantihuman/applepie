@@ -37,7 +37,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <td><input id="c" type="text" name="content" placeholder="回复内容" class="layui-input"></td>
         <td><button class="layui-btn layui-btn-small layui-btn-normal"onclick="add()">添加</button></td>
     </tr>
-    <?php foreach ($list as $data): ?>
+    <?php if(!$list)
+    {
+        exit;
+    }
+        foreach ($list as $data): ?>
     <tr>
         <td><?php echo $data['A_keyword'];?></td>
         <td><?php echo $data['A_content'];?></td>
