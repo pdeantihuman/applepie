@@ -246,8 +246,8 @@ class Fix extends CI_Controller
                 }else{
                     $data = [
                         'Fof_foid' => $id,
-                        'Fof_fuopenid' =>$this->Wxfixuser_model->getOpenIdByName($this->input->post('fixname')),
-                        'Fof_time' =>time(),
+                        'Fof_fuOpenId' =>$this->Wxfixuser_model->getOpenIdByName($this->input->post('fixname')),
+                      /*  'Fof_time' =>time(),*/
                         'Fof_message'=>$this->input->post('message'),
                         'Fof_state' =>1
                     ];
@@ -256,8 +256,8 @@ class Fix extends CI_Controller
                         $fixinfo = $this->Wxfixorder_model->getfixinfobyid($data['Fof_foid']);
                         $address = $this->Wxuserinfo_model->getuerinfobyopenid($fixinfo['Fo_openid'])['U_dormitory'];
                         $datatmp = [
-                            "touser"=>$data['Fof_fuopenid'],
-                            "template_id"=>'NrYxmqf5YqLKOH1KflBZV5TSs6AZcUjPXINKRCM7Lao',
+                            "touser"=>$data['Fof_fuOpenId'],
+                            "template_id"=>'Vl9mHjDrg49ifhkZAYmLBGM-zbeC3-Jz93clPmfjS2I',
                             "url"=>$url,
                             "topcolor"=>"#FF0000",
                             "data"=>[
@@ -266,7 +266,7 @@ class Fix extends CI_Controller
                                     "color"=>"#173177"
                                 ],
                                 'time'=>[
-                                    'value'=>date("Y-m-d H:i:s",$fixinfo['Fo_time']),
+                                    'value'=>$fixinfo['Fo_time'],
                                     "color"=>"#173177"
                                 ],
                                 'address'=>[
@@ -295,8 +295,8 @@ class Fix extends CI_Controller
                 }else{
                     $data = [
                         'Fof_foid' => $id,
-                        'Fof_fuopenid' =>$this->session->openid,
-                        'Fof_time' =>time(),
+                        'Fof_fuOpenId' =>$this->session->openid,
+                        /*'Fof_time' =>time(),*/
                         'Fof_message'=>'完成',
                         'Fof_state' =>2,
                         'Fof_result' =>2

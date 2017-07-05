@@ -94,7 +94,12 @@ class Wxfixorderfollow_model extends CI_Model
      */
     public function addfixorderfollow($data){
         $return = $this->db->insert('fixOrderFollow',$data);
+        $this->db->where('Foid',$data['Fof_foid']);
+        $fo = $this->db->get('fixOrder')->row_array();
+        $this->db->where('Foid',$data['Foid']);
+        $this->db->set('Fo_priority',$fo['Fo_priority']+1);
+        $this->db->update('fixOrder');
+
         return $return ? true : false;
     }
-
 }

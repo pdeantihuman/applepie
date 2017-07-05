@@ -33,9 +33,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                 <?php foreach ($log as $data): ?>
                 <tr>
-                    <td><?php echo $this->Wxfixuser_model->getfixusernamebyopenid($data['Fof_fuopenid']);?></td>
+                    <td><?php echo $this->Wxfixuser_model->getNameByOpenId($data['Fof_fuOpenId']);?></td>
                     <td><?php echo $data['Fof_message'];?></td>
-                    <td><?php echo date("Y-m-d H:i:s",$data['Fof_time']);?></td>
+                    <td><?php echo $data['Fof_time'];?></td>
                 <tr>
                 <?php endforeach; ?>
 

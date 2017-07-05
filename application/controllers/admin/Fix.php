@@ -167,8 +167,8 @@ class Fix extends CI_Controller
             $Foid=$this->input->post('fid');
             $data = [
                 'Fof_foid' => $Foid,
-                'Fof_fuopenid' =>$this->Wxfixuser_model->getOpenIdById($Fuid),
-                'Fof_time' =>time(),
+                'Fof_fuOpenId' =>$this->Wxfixuser_model->getOpenIdById($Fuid),
+/*                'Fof_time' =>time(),*/
                 'Fof_message'=>'管理员分配维修人员',
                 'Fof_state' =>1,
                 'Fof_result' =>1
@@ -179,8 +179,8 @@ class Fix extends CI_Controller
                 $fixinfo = $this->Wxfixorder_model->getfixinfobyid($data['Fof_foid']);
                 $address = $this->Wxuserinfo_model->getuerinfobyopenid($fixinfo['Fo_openid'])['U_dormitory'];
                 $datatmp = [
-                    "touser"=>$data['Fof_fuopenid'],
-                    "template_id"=>'NrYxmqf5YqLKOH1KflBZV5TSs6AZcUjPXINKRCM7Lao',
+                    "touser"=>$data['Fof_fuOpenId'],
+                    "template_id"=>'Vl9mHjDrg49ifhkZAYmLBGM-zbeC3-Jz93clPmfjS2I',
                     "url"=>$url,
                     "topcolor"=>"#FF0000",
                     "data"=>[
@@ -189,7 +189,7 @@ class Fix extends CI_Controller
                             "color"=>"#173177"
                         ],
                         'time'=>[
-                            'value'=>date("Y-m-d H:i:s",$fixinfo['Fo_time']),
+                            'value'=>$fixinfo['Fo_time'],
                             "color"=>"#173177"
                         ],
                         'address'=>[

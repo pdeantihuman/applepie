@@ -36,6 +36,7 @@ class Wxfixorder_model extends CI_Model
     public function add($data){
         $return = $this->db->insert('fixOrder',$data);
         $this->db->where('Fo_openid',$data['Fo_openid']);
+        $this->db->order_by('Fo_time','DESC');
         $fo = $this->db->get('fixOrder')->row_array();
 
 
@@ -117,10 +118,8 @@ class Wxfixorder_model extends CI_Model
      */
     public function updatestate($id, $state){
         $this->db->where('Foid',$id);
-        $data = [
-            'Fo_state' => $state
-        ];
-        $this->db->update('fixOrder',$data);
+        $this->db->set('Fo_state', $state);
+        $this->db->update('fixOrder');
     }
 
     /**
