@@ -37,7 +37,83 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <td><input id="c" type="text" name="content" placeholder="回复内容" class="layui-input"></td>
         <td><button class="layui-btn layui-btn-small layui-btn-normal"onclick="add()">添加</button></td>
     </tr>
-    <?php foreach ($list as $data): ?>
+    <script type="text/javascript" src="/static/admin/frame/layui/layui.js"></script>
+    <script type="text/javascript">
+        layui.use(['laypage','layer'], function () {
+            var $ = layui.jquery;
+
+            var layer = layui.layer;
+
+
+        });
+
+        function del(name){
+            layer.confirm('确定要删除？', {icon: 3, title:'提示'}, function(index){
+                //do something
+                var $ = layui.jquery;
+                $.ajax({
+
+                    url:"/admin/listdata/delautoreply",
+                    type:"post",
+                    data:{
+                        id:name
+                    },
+                    dataType: "json",
+                    success:function (data){
+                        if(data.state=="1"){
+                            layer.msg(data.message, {
+                                icon: 1,
+                                time: 1000
+                            }, function(){
+                                location.reload();
+                            });
+                        }else {
+                            layer.alert(data.message);
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        }
+
+
+        function add(){
+            layer.confirm('确认是否添加', {icon: 3, title:'提示'}, function(index){
+                //do something
+                var $ = layui.jquery;
+                var k = document.getElementById('k').value;
+                var c = document.getElementById('c').value;
+                $.ajax({
+
+                    url:"/admin/listdata/addautoreply",
+                    type:"post",
+                    data:{
+                        keyword:k,
+                        content:c
+                    },
+                    dataType: "json",
+                    success:function (data){
+                        if(data.state=="1"){
+                            layer.msg(data.message, {
+                                icon: 1,
+                                time: 1000
+                            }, function(){
+                                location.reload();
+                            });
+                        }else {
+                            layer.alert(data.message);
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        }
+    </script>
+    <?php if(!$list)
+        exit;
+    foreach ($list as $data):
+
+         ?>
     <tr>
         <td><?php echo $data['A_keyword'];?></td>
         <td><?php echo $data['A_content'];?></td>
@@ -51,77 +127,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-<script type="text/javascript" src="/static/admin/frame/layui/layui.js"></script>
-<script type="text/javascript">
-    layui.use(['laypage','layer'], function () {
-        var $ = layui.jquery;
 
-        var layer = layui.layer;
-
-
-        });
-
-    function del(name){
-        layer.confirm('确定要删除？', {icon: 3, title:'提示'}, function(index){
-            //do something
-            var $ = layui.jquery;
-            $.ajax({
-
-                url:"/admin/listdata/delautoreply",
-                type:"post",
-                data:{
-                    id:name
-                },
-                dataType: "json",
-                success:function (data){
-                    if(data.state=="1"){
-                        layer.msg(data.message, {
-                            icon: 1,
-                            time: 1000
-                        }, function(){
-                            location.reload();
-                        });
-                    }else {
-                        layer.alert(data.message);
-                    }
-                }
-            });
-            layer.close(index);
-        });
-    }
-
-
-    function add(){
-        layer.confirm('确认是否添加', {icon: 3, title:'提示'}, function(index){
-            //do something
-            var $ = layui.jquery;
-            var k = document.getElementById('k').value;
-            var c = document.getElementById('c').value;
-            $.ajax({
-
-                url:"/admin/listdata/addautoreply",
-                type:"post",
-                data:{
-                    keyword:k,
-                    content:c
-                },
-                dataType: "json",
-                success:function (data){
-                    if(data.state=="1"){
-                        layer.msg(data.message, {
-                            icon: 1,
-                            time: 1000
-                        }, function(){
-                            location.reload();
-                        });
-                    }else {
-                        layer.alert(data.message);
-                    }
-                }
-            });
-            layer.close(index);
-        });
-    }
-</script>
 </body>
 </html>
