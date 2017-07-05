@@ -64,7 +64,7 @@ class Net extends CI_Controller
         }
         $data = [
             'N_openid' => $this->session->openid,
-            'N_state' => '1',
+            'N_state' => '4',
             'N_time' => time()
         ];
         //如果要你进行其他验证的话，请在这里进行代码的添加

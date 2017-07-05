@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="@weixin.smell.ren" uuid="9189ad94-c893-4a59-9262-ab615335dbd2">
+    <data-source source="LOCAL" name="@weixin.smell.ren" uuid="2b9fe12c-ba3a-4e3d-a833-d4578c1983ae">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>

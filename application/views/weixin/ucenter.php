@@ -276,7 +276,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <li class="mui-table-view-cell">
                         <a>网号状态<span class="mui-pull-right"><?php
                                 switch ($netinfo['N_state']){
-                                    case 1:
+                                    case 4:
                                         echo '已提交申请';
                                         break;
                                     case 2:
