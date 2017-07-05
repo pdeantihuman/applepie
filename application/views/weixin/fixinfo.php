@@ -189,7 +189,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <li class=" mui-table-view-cell mui-collapse">
                     <a class="mui-navigate-right" href="#">处理进程</a>
                     <div class="mui-collapse-content">
-                        <p>2017-5-12-17:52<span>&nbsp;&nbsp;&nbsp;&nbsp;系统收到你的报修申请</span></p><hr />
+                        <p><?php echo $orderinfo['Fo_time'] ?><span>&nbsp;&nbsp;&nbsp;&nbsp;系统收到你的报修申请</span></p><hr />
                     </div>
                 </li>
             </ul>
