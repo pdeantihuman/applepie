@@ -31,7 +31,16 @@ class Search extends CI_Controller
             return false;
         }
     }
-
+//    public function searchByNetState($state){
+//        $this->db->where('U_number',$state);
+//        $this->db->select('Uid, U_name, U_number,U_openid, U_sex, U_profession, U_class, U_Expclass, U_class, U_instructor, U_phone, U_dormitory, U_time');
+//        $return = $this->db->get('netinfo')->row_array();
+//        if ($return){
+//            return $return; TODO: 需要一个根据开网状态查询的函数
+//        }else{
+//            return false;
+//        }
+//    }
 
     public function searchbynumber(){
         $number = $this->uri->segment(4, 0);

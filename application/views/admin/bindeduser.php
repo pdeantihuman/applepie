@@ -34,6 +34,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <button onclick="search()" class="layui-btn mgl-20"><i class="layui-icon">&#xe615;</i>查询</button>
     </span>
 </div>
+<form class="layui-form" action="/">
+    <div class="layui-form-item">
+        <label class="layui-form-label">分类：</label>
+        <div class="layui-input-inline">
+            <select name="fl" lay-verify="required" id="netState">
+                <option value="">请选择一个状态</option>
+                <option value="0">已提交</option>
+                <option value="1">已开通</option>
+                <option value="2">已冻结</option>
+            </select>
+        </div>
+        <button onclick="searchByNetState()" class="layui-btn mgl-20"><i class="layui-icon">&#xe615;</i>查询</button>
+    </div>
+</form>
 <table id="dateTable" class="layui-table">
     <thead>
     <tr>
@@ -103,9 +117,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!--<script type="text/javascript" src="http://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>-->
 <!--<script type="text/javascript" src="/static/admin/js/table-tool.js"></script>-->
 <script type="text/javascript">
-    layui.use(['laypage', 'layer'], function(){
+    layui.use(['form','layedit','laydate','laypage', 'layer'], function(){
+//        var form = layui.form();
+//        var layedit = layui.layedit;
+//        var laydate = layui.laydate;
+//        var $ =layui.jquery;
         var laypage = layui.laypage
             ,layer = layui.layer;
+//        element = layui.element();
+        form = layui.form();
         laypage({
             cont: 'demo1'
             ,pages: <?php if($count==0) echo 1; else echo ceil($count/10);?> //总页数
@@ -163,6 +183,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             location.href = '/admin/search/searchbynumber/'+number;
         }
 
+    }
+
+    function searchByNetState() {
+        var state = document.getElementById('netState').value;
+        location.href = '/admin/search/searchByNetState/'+state;
     }
 
     function del(name){

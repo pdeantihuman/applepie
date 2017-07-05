@@ -65,6 +65,11 @@ class Wxnetinfo_model extends CI_Model
         }
     }
 
+    public function searchByNetState($state){
+        $this->db->where('N_state',$state);
+        $this->db->get('netinfo')->result_array();
+    }
+
 
 
 }
