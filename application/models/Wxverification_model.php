@@ -83,7 +83,7 @@ class Wxverification_model extends CI_Model
      */
     public function csv(){
         $this->load->dbutil();
-        $query = $this->db->query("SELECT V_name,V_number,V_card,V_profession,V_class FROM verification WHERE V_state = 1");
+        $query = $this->db->query("SELECT V_name,V_number,V_card,V_profession,V_class FROM verification WHERE NOT EXISTS (SELECT * FROM userinfo WHERE U_number=verification.V_number)");
         $delimiter = ",";
         $newline = "\r\n";
         $enclosure = '"';
