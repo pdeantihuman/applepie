@@ -134,7 +134,7 @@ class Fix extends CI_Controller
             exit;
         }
         $data['JS']=$this->ci_wechat->getJsSign('http://weixin.smell.ren/');
-        $data['fixorderfollow']=$this->Wxfixorderfollow_model->getinfobyfoid($id);
+        $data['fixOrderFollow']=$this->Wxfixorderfollow_model->getinfobyfoid($id);
         $this->load->view('weixin/fixinfobyid',$data);
     }
 
@@ -157,7 +157,7 @@ class Fix extends CI_Controller
             exit;
         }
         $data['id']=$id;
-        $data['fixorderfollow']=$this->Wxfixorderfollow_model->getinfobyfoid($id);
+        $data['fixOrderFollow']=$this->Wxfixorderfollow_model->getinfobyfoid($id);
         $data['address']=$this->Wxuserinfo_model->getuerinfobyopenid($this->Wxfixorder_model->getfixopenidbyid($id))['U_dormitory'];
         $this->load->view('weixin/fixinfoforfix',$data);
 
@@ -189,7 +189,7 @@ class Fix extends CI_Controller
                         'state'=> 'error',
                         'message' =>'你没有申请开通网络，不可进行报修操作'
                     ];
-                }elseif($this->Wxfixorder_model->getLatestOrderByOpenId($this->session->openid)){
+                }else if($this->Wxfixorder_model->getLatestOrderStateByOpenId($this->session->openid)){
                     $return=[
                         'state'=> 'success',
                         'link' =>'/fix/addfix'
@@ -210,11 +210,12 @@ class Fix extends CI_Controller
                 echo json_encode($return);
                 break;
             case 'addfix':
+
                 if($this->Wxfixorder_model->getLatestOrderStateByOpenId($this->session->openid)){
                     $data =[
                         'Fo_openid' => $this->session->openid,
                         'Fo_type' => $this->input->post('type'),
-                        'Fo_content' => $this->input->post('content'),
+                        'Fo_comment' => $this->input->post('content'),
                         'Fo_state' => '1'
                     ];
                     if($this->Wxfixorder_model->add($data)){
@@ -224,7 +225,6 @@ class Fix extends CI_Controller
                         ];
                         echo json_encode($return);
                     }
-
                 }else{
                     $return=[
                         'state'=> 'error',
@@ -262,7 +262,7 @@ class Fix extends CI_Controller
                             "topcolor"=>"#FF0000",
                             "data"=>[
                                 'message'=>[
-                                    'value'=>$fixinfo['Fo_content'],
+                                    'value'=>$fixinfo['Fo_comment'],
                                     "color"=>"#173177"
                                 ],
                                 'time'=>[

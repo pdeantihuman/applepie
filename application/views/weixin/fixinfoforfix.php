@@ -190,7 +190,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <li class=" mui-table-view-cell mui-collapse">
                     <a class="mui-navigate-right" href="#">报修详情</a>
                     <div class="mui-collapse-content">
-                        <p><?php echo $info['Fo_content'];?></p>
+                        <p><?php echo $info['Fo_comment'];?></p>
                     </div>
                 </li>
             </ul>

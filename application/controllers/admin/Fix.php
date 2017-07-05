@@ -185,7 +185,7 @@ class Fix extends CI_Controller
                     "topcolor"=>"#FF0000",
                     "data"=>[
                         'message'=>[
-                            'value'=>$fixinfo['Fo_content'],
+                            'value'=>$fixinfo['Fo_comment'],
                             "color"=>"#173177"
                         ],
                         'time'=>[

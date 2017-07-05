@@ -53,7 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 break;
                         }
                         ?>
-                    <?php echo date("Y-m-d H:i:s",$data['Fo_time']);?>
+                    <?php echo $data['Fo_time']/* date("Y-m-d H:i:s",$data['Fo_time'])*/;?>
                 </a>
             </li>
             <?php endforeach; ?>
