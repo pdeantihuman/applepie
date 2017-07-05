@@ -166,7 +166,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="mui-scroll">
             <ul class="mui-card mui-table-view">
                 <li class="mui-table-view-cell">
-                    <a>报修时间<span class="mui-pull-right"><?php echo date("Y-m-d H:i:s",$info['Fo_time']);?></span></a>
+                    <a>报修时间<span class="mui-pull-right"><?php echo $info['Fo_time']/*date("Y-m-d H:i:s",$info['Fo_time'])*/;?></span></a>
                 </li>
                 <li class="mui-table-view-cell">
                     <a>处理状态<span class="mui-pull-right"><?php
@@ -194,7 +194,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <li class=" mui-table-view-cell mui-collapse">
                     <a class="mui-navigate-right" href="#">报修详情</a>
                     <div class="mui-collapse-content">
-                        <p><?php echo $info['Fo_content'];?></p>
+                        <p><?php echo $info['Fo_comment'];?></p>
                     </div>
                 </li>
             </ul>
@@ -204,8 +204,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="mui-collapse-content">
 
                         <?php
-                        foreach ($fixorderfollow as $data): ?>
-                            <p>处理人：<?php echo $this->Wxfixuser_model->getfixusernamebyopenid($data['Fof_fuopenid']);?>&nbsp;<?php echo $data['Fof_message'];?>&nbsp;<?php echo date("Y-m-d H:i:s",$data['Fof_time']);?><hr />
+                        foreach ($fixOrderFollow as $item): ?>
+                            <p>处理人：<?php echo $this->Wxfixuser_model->getNameByOpenId($item['Fof_fuOpenId']);?>&nbsp;<?php echo $item['Fof_message'];?>&nbsp;<?php echo $item['Fof_time'];?><hr />
                         <?php endforeach; ?>
 
 

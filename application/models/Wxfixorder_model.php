@@ -24,7 +24,7 @@ class Wxfixorder_model extends CI_Model
         $this->db->where('Fo_openid', $openid);
         $this->db->order_by('Fo_time','DESC');
         $this->db->select('Fo_state');
-        $result = $this->db->get('fixOrder')->first_row()['Fo_state'];
+        $result = $this->db->get('fixOrder')->row_array()['Fo_state'];
         return $result != 3 ? (is_null($result) ? true : (false)) : (is_null($result) ? true : (true));
     }
 
@@ -35,6 +35,16 @@ class Wxfixorder_model extends CI_Model
      */
     public function add($data){
         $return = $this->db->insert('fixOrder',$data);
+        $this->db->where('Fo_openid',$data['Fo_openid']);
+        $fo = $this->db->get('fixOrder')->row_array();
+
+
+        $initial = [
+            'Fof_foid' => $fo['Foid'],
+            'Fof_fuOpenId' => 0,
+            'Fof_message' => '系统收到你的报修申请'
+        ];
+        $this->db->insert('fixOrderFollow',$initial);
         return $return ? true : false;
     }
 
@@ -48,7 +58,7 @@ class Wxfixorder_model extends CI_Model
         $this->db->where('Fo_openid',$openid);
         $this->db->order_by('Foid','DESC');
         $this->db->limit(1);
-        $this->db->select('Fo_time,Fo_type,Fo_state,Fo_content');
+        $this->db->select('Fo_time,Fo_type,Fo_state,Fo_comment');
         $result = $this->db->get('fixOrder')->row_array();
         return $result;
 
@@ -72,7 +82,7 @@ class Wxfixorder_model extends CI_Model
     public function getfixlistbyid($id,$openid){
         $this->db->where('Foid',$id);
         $this->db->where('Fo_openid',$openid);
-        $this->db->select('Fo_time,Fo_type,Fo_state,Fo_content');
+        $this->db->select('Fo_time,Fo_type,Fo_state,Fo_comment');
         $result = $this->db->get('fixOrder')->row_array();
         return $result ? $result : false;
     }

@@ -23,13 +23,13 @@ class Wxfixorderfollow_model extends CI_Model
     public function getinfobyfoid($foid){
         $this->db->where('Fof_foid',$foid);
         $this->db->order_by('Fof_time','DESC');
-        $result = $this->db->get('fixorderfollow')->result_array();
+        $result = $this->db->get('fixOrderFollow')->result_array();
         return $result ? $result : false;
     }
     public function getfixlistbyresult($Fof_result){
         $this->db->order_by('Fof_time','DESC');
         $this->db->where('Fof_result',$Fof_result);
-        $data = $this->db->get('fixorderfollow')->result_array();
+        $data = $this->db->get('fixOrderFollow')->result_array();
         if($data){
             return $data;
         }else{
@@ -49,7 +49,7 @@ class Wxfixorderfollow_model extends CI_Model
         $this->db->order_by('Fofid','DESC');
         $this->db->limit(1);
         $this->db->select('Fof_state');
-        $result = $this->db->get('fixorderfollow')->row_array()['Fof_state'];
+        $result = $this->db->get('fixOrderFollow')->row_array()['Fof_state'];
         switch ($result){
             case 1:
                 return false;
@@ -73,7 +73,7 @@ class Wxfixorderfollow_model extends CI_Model
         $this->db->order_by('Fofid','DESC');
         $this->db->limit(1);
         $this->db->select('Fof_result');
-        $result = $this->db->get('fixorderfollow')->row_array()['Fof_result'];
+        $result = $this->db->get('fixOrderFollow')->row_array()['Fof_result'];
         switch ($result){
             case 1:
                 return false;
@@ -93,7 +93,7 @@ class Wxfixorderfollow_model extends CI_Model
      * 添加维修跟踪信息
      */
     public function addfixorderfollow($data){
-        $return = $this->db->insert('fixorderfollow',$data);
+        $return = $this->db->insert('fixOrderFollow',$data);
         return $return ? true : false;
     }
 
