@@ -40,7 +40,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <td><?php echo $data['userinfo']['U_name'];?></td>
             <td><?php echo $data['userinfo']['U_phone'];?></td>
             <td><?php echo $data['Fo_comment'];?></td>
-            <td><?php echo date("Y-m-d H:i:s",$data['Fo_time']);?></td>
+            <td><?php echo $data['Fo_time'];?></td>
             <td><button class="layui-btn layui-btn-small layui-btn-normal" onclick="content('<?php echo $data['Foid'];?>')">分配维修</button>
                 <button class="layui-btn layui-btn-small layui-btn-danger" onclick="del('<?php echo $data['Foid'];?>')">删除</button>
             </td>
