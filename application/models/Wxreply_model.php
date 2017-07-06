@@ -43,6 +43,11 @@ class Wxreply_model extends CI_Model
         }
     }
     public function add($data){
+        $this->db->where('A_keyword',$data['A_keyword']);
+        if($this->db->count_all_results('autoreply')>0)
+        {
+            return false;
+        }
         $return = $this->db->insert('autoreply',$data);
         return $return ? true : false;
     }
