@@ -25,9 +25,23 @@ class Wxnetinfo_model extends CI_Model
     public function checkuseropenid($openid){
         $this->db->where('N_openid', $openid);
         $result = $this->db->get('netinfo');
-        return $result->num_rows() > 0 ? true : false;
+        return $result->num_rows() > 0 ;
     }
 
+    public function applicationByOpenId($openid){
+        $this->db->where('N_openid',$openid);
+        $this->db->set('N_state',4);
+        $this->db->update('netinfo');
+        return $this->db->affected_rows()>0;
+    }
+
+    public function initializeNetInfo($openid){
+        $data = [
+            'N_openid' => $openid,
+        ];
+        $return = $this->db->insert('netinfo',$data);
+        return $this->db->affected_rows()>0;
+    }
 
     /**
      * @param $data

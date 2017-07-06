@@ -38,7 +38,6 @@ class BindApi extends CI_Controller
         $U_instructor = $this->input->post('fuzu');
         $U_dormitory = $this->input->post('zainum')."斋".$this->input->post('ssnum');
         $U_phone = $this->input->post('tel');
-        $U_time = time();
         $data = [
             'U_openid' => $U_openid,
             'U_name' => $U_name,
@@ -51,7 +50,6 @@ class BindApi extends CI_Controller
             'U_instructor' =>$U_instructor,
             'U_dormitory'=>$U_dormitory,
             'U_phone'=>$U_phone,
-            'U_time'=>$U_time,
             'U_grade'=>substr($U_number,0,2)
         ];
         if($this->Wxuserinfo_model->checkuseropenid($data['U_openid'])){

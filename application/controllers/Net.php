@@ -17,6 +17,7 @@ class Net extends CI_Controller
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('CI_Wechat');
+        $this->load->model('Wxuserinfo_model');
         $this->load->model('Wxnetinfo_model');
     }
 
@@ -42,17 +43,26 @@ class Net extends CI_Controller
         return true;
     }
 
+    private function _checkuser(){
+        if($this->Wxuserinfo_model->checkuseropenid($this->session->openid)) {
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     public function index(){
         if(!$this->checkopenid()){
             exit;
         }
-        if($this->Wxnetinfo_model->checkuseropenid($this->session->openid)){
+        if($this->_checkuser()){
+            if ($this->Wxnetinfo_model->getStateByOpenId($this->session->openid)==1)
+                $this->load->view('weixin/netinfo');
             //检查用户已经开通了账户，下一步需要调用内网的借口进行查询剩余网费的信息
+
+        }else {
             $url="http://weixin.smell.ren/bind";
             header("location:$url");
-        }else{
-            $this->load->view('weixin/netinfo');
         }
 
     }
@@ -62,15 +72,15 @@ class Net extends CI_Controller
         if(!$this->checkopenid()){
             exit;
         }
-        $data = [
-            'N_openid' => $this->session->openid,
-            'N_state' => '4',
-            'N_time' => time()
-        ];
+//        $data = [
+//            'N_openid' => $this->session->openid,
+//            'N_state' => '4',
+//            'N_time' => time()
+//        ];
         //如果要你进行其他验证的话，请在这里进行代码的添加
 
 
-        if($this->Wxnetinfo_model->checkuseropenid($this->session->openid)){
+        if($this->Wxnetinfo_model->getStateByOpenId($this->session->openid)==4){
             $return=[
                 'state'=> 'error',
                 'message' =>'你已经提交过申请'
@@ -78,10 +88,17 @@ class Net extends CI_Controller
             echo json_encode($return);
             exit;
         }
-        if($this->Wxnetinfo_model->add($data)){
+        if($this->Wxnetinfo_model->applicationByOpenId($this->session->openid)){
             $return=[
                 'state'=> 'success',
                 'link' =>'/url/bind'
+            ];
+            echo json_encode($return);
+            exit;
+        }else{
+            $return=[
+                'state' => 'error',
+                'message' => '申请失败'
             ];
             echo json_encode($return);
             exit;

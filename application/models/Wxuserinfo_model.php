@@ -16,6 +16,7 @@ class Wxuserinfo_model extends CI_Model
         parent::__construct();
         $this->load->database();
         $this->load->model('Wxverification_model');
+        $this->load->model('Wxnetinfo_model');
     }
 
 
@@ -111,8 +112,10 @@ class Wxuserinfo_model extends CI_Model
      * 添加绑定用户
      */
     public function adduserinfo($data){
-        $return = $this->db->insert('userinfo',$data);
-        return $return ? true : false;
+        $this->db->insert('userinfo',$data);
+        $return1 = $this->db->affected_rows()>0;
+        $return2 =$this->Wxnetinfo_model->initializeNetInfo($data['U_openid']);
+        return $return1 and $return2;
     }
 
     /**

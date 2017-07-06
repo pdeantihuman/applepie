@@ -97,7 +97,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             }
 
             ?></td>
-        <td><?php echo date("Y-m-d H:i:s",$data['U_time']);?></td>
+        <td><?php echo $data['U_time'];?></td>
         <td>
 <!--            <button class="layui-btn layui-btn-small">查看</button>-->
 <!--            <button class="layui-btn layui-btn-small layui-btn-normal">编辑</button>-->
