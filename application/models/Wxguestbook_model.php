@@ -55,4 +55,15 @@ class Wxguestbook_model extends CI_Model
             return false;
         }
     }
+    public function searchByKey($key){
+        $this->db->like('g_content',$key);
+        $this->db->select('g_type,g_content,g_picture');
+        $return = $this->db->get('guestbook');
+        if($return){
+            return $return;
+        }else{
+            return false;
+        }
+
+    }
 }

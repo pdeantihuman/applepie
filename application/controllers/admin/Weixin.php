@@ -104,7 +104,7 @@ class Weixin extends CI_Controller
                         "sub_button"=> array(
                             array('type'=>'view','name'=>'申请开网','url'=>'http://weixin.smell.ren/url/net'),
                             array('type'=>'view','name'=>'网络报修','url'=>'http://weixin.smell.ren/url/repair'),
-                            array('type'=>'view','name'=>'帮助手册','url'=>'http://weixin.smell.ren/news/news/')
+//                            array('type'=>'view','name'=>'帮助手册','url'=>'http://weixin.smell.ren/news/news/')
                         )
                     ),
 

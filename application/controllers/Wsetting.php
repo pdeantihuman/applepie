@@ -38,7 +38,7 @@ class Wsetting extends CI_Controller{
                         array('type'=>'view','name'=>'账号绑定','url'=>'http://weixin.smell.ren/url/bind'),
                         array('type'=>'view','name'=>'申请开网','url'=>'http://weixin.smell.ren/url/net'),
                         array('type'=>'view','name'=>'网络报修','url'=>'http://weixin.smell.ren/url/repair'),
-                        array('type'=>'view','name'=>'网络助手','url'=>'http://weixin.smell.ren/news/news/')
+ //                       array('type'=>'view','name'=>'网络助手','url'=>'http://weixin.smell.ren/news/news/')
                     )
                 ),
 

@@ -164,6 +164,15 @@ class Listdata extends CI_Controller
             $this->load->view('admin/guestbook',$data);
         }
     }
+    public function guestBookSearch(){
+        $key = $this->uri->segment(4,0);
+        if($this->check_is_adminer()){
+            exit;
+        }else{
+            $data['list'] = $this->Wxguestbook_model->searchByKey($key);
+
+        }
+    }
 
 
     /**
