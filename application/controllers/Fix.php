@@ -216,6 +216,7 @@ class Fix extends CI_Controller
                                 'link' =>'/fix/addfix'
                             ];
                         }
+                        break;
                 }
                 echo json_encode($return);
                 break;

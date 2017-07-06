@@ -44,7 +44,7 @@ class Fix extends CI_Controller
             exit;
         }else{
             $data['list'] = $this->Wxfixorder_model->getUnTreatedOrder();
-            if(is_null($data['list'])){
+            if(is_null($data['list']['Fo_time'])){
                 echo "没有需要处理的数据";
                 exit;
             }

@@ -26,11 +26,11 @@ class Wxfixorder_model extends CI_Model
         $this->db->order_by('Fo_time','DESC');
         $row = $this->db->get('fixOrder')->row_array();
         if (is_null($row)){
-            return true;
-        }else if ($row['Fo_state']==3)
-            return true;
-        else
             return false;
+        }else if ($row['Fo_state']==3)
+            return false;
+        else
+            return true;
     }
 
     /**
