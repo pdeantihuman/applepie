@@ -59,7 +59,10 @@ class Net extends CI_Controller
             if ($this->Wxnetinfo_model->getStateByOpenId($this->session->openid)==1)
                 $this->load->view('weixin/netinfo');
             //检查用户已经开通了账户，下一步需要调用内网的借口进行查询剩余网费的信息
-
+            else{
+                $url="http://weixin.smell.ren/bind";
+                header("location:$url");
+            }
         }else {
             $url="http://weixin.smell.ren/bind";
             header("location:$url");

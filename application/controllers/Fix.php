@@ -201,7 +201,7 @@ class Fix extends CI_Controller
                     case '4':
                         $return=[
                             'state' => 'error',
-                            'link' => '你还未开通网络，不可进行报修操作。'
+                            'message' => '你还未开通网络，不可进行报修操作。'
                         ];
                         break;
                     default:
