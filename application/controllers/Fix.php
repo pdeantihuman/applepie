@@ -31,7 +31,7 @@ class Fix extends CI_Controller
     private function checkopenid(){
         if(!$this->session->openid){
             $accessToken = $this->ci_wechat->getOauthAccessToken();
-            if($accessToken['openid'] === null){
+            if(!isset($accessToken['openid'])){
                 echo "你想干嘛想干嘛想干嘛。这里不给你看(*@ο@*) 哇～";
                 return false;
             } else{
@@ -73,9 +73,9 @@ class Fix extends CI_Controller
             exit;
         }
         if($this->_checkuser()){
-            if ($this->isFixUser())
-                $this->load->view('weixin/fixinfoforfix'); // TODO:  需要一个维修人员的页面
-            else
+//            if ($this->isFixUser())
+//                $this->load->view('weixin/fixinfoforfix'); //TODO:需要一个维修人员的页面
+//            else
                 $this->load->view('weixin/netfix');
         }else{
             $url=$this->ci_wechat->getOauthRedirect("http://weixin.smell.ren/bind");
@@ -115,7 +115,7 @@ class Fix extends CI_Controller
         if(!$this->_checkuser()){
             exit;
         }
-        $oderinfo=$this->Wxfixorder_model->getNeworder($this->session->openid);
+        $oderinfo=$this->Wxfixorder_model->getLatestOrder($this->session->openid);
         $data['orderinfo'] = $oderinfo;
         $this->load->view('weixin/fixinfo',$data);
     }
@@ -147,7 +147,7 @@ class Fix extends CI_Controller
             exit;
         }
         if($this->Wxfixorderfollow_model->getresult($id)){
-            echo '已经处理过了';
+            $this->load->view('weixin/processed');
             exit;
         }
         $data['fixUser']=$this->Wxfixuser_model->getallfixusername();
@@ -181,24 +181,40 @@ class Fix extends CI_Controller
         if(is_null($key)){
             show_404();
         }
-
+        $state=$this->Wxnetinfo_model->getStateByOpenId($this->session->openid);
         switch ($key){
             case 'fix':
-                if(!$this->Wxnetinfo_model->get_net_state($this->session->openid)){
-                    $return=[
-                        'state'=> 'error',
-                        'message' =>'你没有申请开通网络，不可进行报修操作'
-                    ];
-                }else if($this->Wxfixorder_model->getLatestOrderStateByOpenId($this->session->openid)){
-                    $return=[
-                        'state'=> 'success',
-                        'link' =>'/fix/addfix'
-                    ];
-                } else{
-                    $return=[
-                        'state'=> 'error',
-                        'message' =>'你还有没有处理完的报修订单'
-                    ];
+                switch ($state){
+                    case '1':
+                        $return=[
+                            'state' => 'error',
+                            'message' => '你未申请开通网络，不可进行报修操作。'
+                        ];
+                        break;
+                    case '3':
+                        $return=[
+                            'state' => 'error',
+                            'message' => '你的账户已被冻结，不可进行报修操作。'
+                        ];
+                        break;
+                    case '4':
+                        $return=[
+                            'state' => 'error',
+                            'link' => '你还未开通网络，不可进行报修操作。'
+                        ];
+                        break;
+                    default:
+                        if($this->Wxfixorder_model->hasUnfinishedOrder($this->session->openid)){
+                            $return=[
+                                'state'=> 'error',
+                                'message' =>'你仍有未完成的报修'
+                            ];
+                        } else{
+                            $return=[
+                                'state'=> 'success',
+                                'link' =>'/fix/addfix'
+                            ];
+                        }
                 }
                 echo json_encode($return);
                 break;
@@ -211,12 +227,17 @@ class Fix extends CI_Controller
                 break;
             case 'addfix':
 
-                if($this->Wxfixorder_model->getLatestOrderStateByOpenId($this->session->openid)){
+                if($this->Wxfixorder_model->hasUnfinishedOrder($this->session->openid)){
+                    $return=[
+                        'state'=> 'error',
+                        'message' =>'你的报修信息已提交，请不要重复提交'
+                    ];
+                    echo json_encode($return);
+                }else{
                     $data =[
                         'Fo_openid' => $this->session->openid,
                         'Fo_type' => $this->input->post('type'),
-                        'Fo_comment' => $this->input->post('content'),
-                        'Fo_state' => '1'
+                        'Fo_comment' => $this->input->post('comment'),
                     ];
                     if($this->Wxfixorder_model->add($data)){
                         $return=[
@@ -224,13 +245,12 @@ class Fix extends CI_Controller
                             'link' =>'/fix/newfix'
                         ];
                         echo json_encode($return);
+                    }else{
+                        $return=[
+                            'state' => 'error',
+                            'message'=> '添加订单失败'
+                        ];
                     }
-                }else{
-                    $return=[
-                        'state'=> 'error',
-                        'message' =>'你的报修信息已提交，请不要重复提交'
-                    ];
-                    echo json_encode($return);
                 }
 
                 break;

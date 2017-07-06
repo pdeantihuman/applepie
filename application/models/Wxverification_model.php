@@ -77,6 +77,19 @@ class Wxverification_model extends CI_Model
         }
     }
 
+
+    /**
+     * @param $card
+     * @return bool
+     * TRUE on success, FALSE on failure
+     */
+    public function dismissByCard($card){
+        $this->db->set('V_state',1);
+        $this->db->where('V_card',$card);
+        $this->db->update('verification');
+        return $this->db->affected_rows()>0;
+    }
+
     /**
      * @return mixed
      * 获取未绑定用户的数据到txt

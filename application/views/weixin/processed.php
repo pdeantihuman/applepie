@@ -153,33 +153,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="mui-scroll">
             <ul class="mui-card mui-table-view">
                 <li class="mui-table-view-cell">
-                    <a>报修时间<span class="mui-pull-right"><?php echo $orderinfo['Fo_time']; ?></span></a>
+                    <a>状态<span class="mui-pull-right">已处理</span></a>
                 </li>
-                <li class="mui-table-view-cell">
-                    <a>处理状态<span class="mui-pull-right"><?php echo '已提交';
-                            ?></span></a>
-                </li>
-                <li class="mui-table-view-cell">
-                    <a>报修类型<span class="mui-pull-right"><?php echo $orderinfo['Fo_type'];?></span></a>
-                </li>
+            </ul>
 
-            </ul>
-            <ul class="mui-card mui-table-view">
-                <li class=" mui-table-view-cell mui-collapse">
-                    <a class="mui-navigate-right" href="#">报修详情</a>
-                    <div class="mui-collapse-content">
-                        <p><?php echo $orderinfo['Fo_comment'];?></p>
-                    </div>
-                </li>
-            </ul>
-            <ul class="mui-card mui-table-view">
-                <li class=" mui-table-view-cell mui-collapse">
-                    <a class="mui-navigate-right" href="#">处理进程</a>
-                    <div class="mui-collapse-content">
-                        <p><?php echo $orderinfo['Fo_time'] ?><span>&nbsp;&nbsp;&nbsp;&nbsp;系统收到你的报修申请</span></p><hr />
-                    </div>
-                </li>
-            </ul>
 
         </div>
     </div>

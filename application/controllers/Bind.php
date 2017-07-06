@@ -18,6 +18,7 @@ class Bind extends CI_Controller{
         $this->load->library('CI_Wechat');
         $this->load->model('Wxuserinfo_model');
         $this->load->model('Sysconfig_model');
+        $this->load->model('Wxnetinfo_model');
 
 
     }//....
@@ -30,7 +31,7 @@ class Bind extends CI_Controller{
     private function checkopenid(){
         if(!$this->session->openid){
             $accessToken = $this->ci_wechat->getOauthAccessToken();
-            if($accessToken['openid'] === null){
+            if(isset($accessToken['openid'])){
                 echo "你想干嘛想干嘛想干嘛。这里不给你看(*@ο@*) 哇～";
                 return false;
             } else{
@@ -53,7 +54,7 @@ class Bind extends CI_Controller{
         }
         if($this->Wxuserinfo_model->checkuseropenid($this->session->openid)){
             $data['userinfo']=$this->Wxuserinfo_model->getuerinfobyopenid($this->session->openid);
-            $this->load->model('Wxnetinfo_model');
+
             $data['netstate']= $this->Wxnetinfo_model->getstate($this->session->openid);
             $data['JS']=$this->ci_wechat->getJsSign('http://weixin.smell.ren/ur/bind');
             $this->load->view('weixin/userinfo',$data);

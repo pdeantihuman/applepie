@@ -20,12 +20,16 @@ class Wxfixorder_model extends CI_Model
      * @return bool
      * 获取当前用户的最新一条报修记录的状态信息
      */
-    public function getLatestOrderStateByOpenId($openid){
+    public function hasUnfinishedOrder($openid){
         $this->db->where('Fo_openid', $openid);
         $this->db->order_by('Fo_time','DESC');
-        $this->db->select('Fo_state');
-        $result = $this->db->get('fixOrder')->row_array()['Fo_state'];
-        return $result != 3 ? (is_null($result) ? true : (false)) : (is_null($result) ? true : (true));
+        $row = $this->db->get('fixOrder')->row_array();
+        if (is_null($row)){
+            return true;
+        }else if ($row['Fo_state']==3)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -55,10 +59,9 @@ class Wxfixorder_model extends CI_Model
      * @return mixed
      * 获取用户的最新一条维修记录
      */
-    public function getNeworder($openid){
+    public function getLatestOrder($openid){
         $this->db->where('Fo_openid',$openid);
-        $this->db->order_by('Foid','DESC');
-        $this->db->limit(1);
+        $this->db->order_by('Fo_time','DESC');
         $this->db->select('Fo_time,Fo_type,Fo_state,Fo_comment');
         $result = $this->db->get('fixOrder')->row_array();
         return $result;
@@ -83,7 +86,7 @@ class Wxfixorder_model extends CI_Model
     public function getfixlistbyid($id,$openid){
         $this->db->where('Foid',$id);
         $this->db->where('Fo_openid',$openid);
-        $this->db->select('Fo_time,Fo_type,Fo_state,Fo_comment');
+        $this->db->select('Fo_type,Fo_comment,Fo_state,Fo_time');
         $result = $this->db->get('fixOrder')->row_array();
         return $result ? $result : false;
     }
@@ -95,7 +98,6 @@ class Wxfixorder_model extends CI_Model
      */
     public function getfixopenidbyid($id){
         $this->db->where('Foid',$id);
-        $this->db->select('Fo_openid');
         $result=$this->db->get('fixOrder')->row_array()['Fo_openid'];
         return $result ? $result : false;
     }

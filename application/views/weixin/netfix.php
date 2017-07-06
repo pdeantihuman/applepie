@@ -41,7 +41,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <script>
     var addurl = '<?php $url =base_url('fix/api');echo "http://$url";?>';
     var btn1 = document.getElementById("upload");
-    btn1.addEventListener("tap",function(enent) {
+    btn1.addEventListener("tap",function(event) {
         mui.post(addurl,{
             key:'fix'
             },function(data){
@@ -58,7 +58,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     });
     var btn2 = document.getElementById("my");
-    btn2.addEventListener("tap",function(enent) {
+    btn2.addEventListener("tap",function(event) {
         mui.post(addurl,{
                 key:'fixlist'
             },function(data){

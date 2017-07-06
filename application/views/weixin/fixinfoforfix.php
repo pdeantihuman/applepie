@@ -15,6 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title></title>
     <link href="/static/css/mui.min.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/static/js/mui.min.js" ></script>
     <style>
         html,
         body {
@@ -159,7 +160,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="mui-scroll">
             <ul class="mui-card mui-table-view">
                 <li class="mui-table-view-cell">
-                    <a>报修时间<span class="mui-pull-right"><?php echo date("Y-m-d H:i:s",$info['Fo_time']);?></span></a>
+                    <a>报修时间<span class="mui-pull-right"><?php echo $info['Fo_time'];?></span></a>
                 </li>
                 <li class="mui-table-view-cell">
                     <a>处理状态<span class="mui-pull-right"><?php
@@ -194,12 +195,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </li>
             </ul>
+
             <ul class="mui-card mui-table-view">
                 <li class=" mui-table-view-cell mui-collapse">
                     <a class="mui-navigate-right" href="#">处理进程</a>
                     <div class="mui-collapse-content">
-                        <?php foreach ($fixorderfollow as $data): ?>
-                            <p>处理人：<?php echo $this->Wxfixuser_model->getfixusernamebyopenid($data['Fof_fuopenid']);?>&nbsp;<?php echo $data['Fof_message'];?>&nbsp;<?php echo date("Y-m-d H:i:s",$data['Fof_time']);?><hr />
+                        <?php foreach ($fixOrderFollow as $data): ?>
+                            <p>处理人：<?php echo $this->Wxfixuser_model->getNameByOpenId($data['Fof_fuOpenId']);?>&nbsp;<?php echo $data['Fof_message'];?>&nbsp;<?php echo $data['Fof_time'];?><hr />
                         <?php endforeach; ?>
 
 
@@ -215,7 +217,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <label>转交给</label>
                                 <select id="fixname">
                                     <option value="">---请选择---</option>
-                                    <?php foreach ($fixuser as $data): ?>
+                                    <?php foreach ($fixUser as $data): ?>
                                         <option><?php echo $data['Fu_name'];?></option>
                                     <?php endforeach; ?>
                                 </select>
@@ -250,7 +252,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div>
 
 </body>
-<script type="text/javascript" src="/static/js/mui.min.js" ></script>
+
 <script>
     var addurl = '<?php $url =base_url('fix/api');echo "http://$url";?>';
     var fixname = document.getElementById("fixname");

@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
             <div class="mui-input-row" style="margin: 10px 5px;">
-                <textarea id="content" rows="5" placeholder="请描述你所遇到的问题"></textarea>
+                <textarea id="comment" rows="5" placeholder="请描述你所遇到的问题"></textarea>
             </div>
 
 
@@ -69,25 +69,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     });
     var addurl = '<?php $url =base_url('fix/api');echo "http://$url";?>';
     var type = document.getElementById("type");
-    var content = document.getElementById("content");
+    var comment = document.getElementById("comment");
     var btn = document.getElementById("btn");
     btn.addEventListener("tap",function(enent) {
         var info = {
             type : type.value,
-            content : content.value
+            comment : comment.value
         };
         if (info.type == "") {
             mui.toast('请选择报修类型',{ duration:'long', type:'div' });
             return;
         }
-        if (info.content == "") {
+        if (info.comment == "") {
             mui.toast('请填写描述信息',{ duration:'long', type:'div' });
             return;
         }
         mui.post(addurl,{
                 key:"addfix",
                 type:info.type,
-                content:info.content
+                comment:info.comment
             },function(data){
                 if(data.state === 'success'){
                     window.location.href=data.link;

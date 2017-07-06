@@ -29,7 +29,7 @@ class Ucenter extends CI_Controller
     private function checkopenid(){
         if(!$this->session->openid){
             $accessToken = $this->ci_wechat->getOauthAccessToken();
-            if($accessToken['openid'] === null){
+            if(!isset($accessToken['openid'])){
                 echo "你想干嘛想干嘛想干嘛。这里不给你看(*@ο@*) 哇～";
                 return false;
             } else{

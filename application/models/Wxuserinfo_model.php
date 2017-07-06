@@ -6,7 +6,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * User: henbf
  * Date: 2017/5/8
  * Time: 9:58
- * 绑定信息用户表数据操作
+ * 用户信息表数据操作
+ *
  */
 class Wxuserinfo_model extends CI_Model
 {
@@ -14,12 +15,13 @@ class Wxuserinfo_model extends CI_Model
     {
         parent::__construct();
         $this->load->database();
+        $this->load->model('Wxverification_model');
     }
 
 
     /**
-     * @param $U_name
-     * @return bool
+     * @param $U_number
+     * @return array
      * 根据用户学号查询与用户个人信息
      */
     public function searchbynumber($U_number){
@@ -41,20 +43,15 @@ class Wxuserinfo_model extends CI_Model
      * @param $Uid
      * @return bool
      * 根据用户的Uid删除用户资料
+     * 并标记为未绑定
      */
     public function del($Uid){
         $this->db->where('Uid',$Uid);
         $row = $this->db->get('userinfo')->row_array();
-        $this->db->set('V_state',1);
-        $this->db->where('V_card',$row['U_card']);
-        $this->db->update('verification');
+        $this->Wxverification_model->dismissByCard($row['U_card']);
         $this->db->where('Uid',$Uid);
-        $return = $this->db->delete('userinfo');
-        if ($return){
-            return true;
-        }else{
-            return false;
-        }
+        $this->db->delete('userinfo');
+        return $this->db->affected_rows()>0;
     }
 
 
@@ -92,8 +89,9 @@ class Wxuserinfo_model extends CI_Model
 
     /**
      * @param $openid
-     * @return bool
+     * @return array
      * 根据用户的openid获取用户的绑定信息
+     * 返回一维数组
      */
     public function getuerinfobyopenid($openid){
         $this->db->where('U_openid',$openid);
@@ -109,8 +107,8 @@ class Wxuserinfo_model extends CI_Model
 
     /**
      * @param $data
-     * 添加绑定用户
      * @return bool
+     * 添加绑定用户
      */
     public function adduserinfo($data){
         $return = $this->db->insert('userinfo',$data);
@@ -120,45 +118,45 @@ class Wxuserinfo_model extends CI_Model
     /**
      * @param $openid
      * @return bool
-     * 判断用户openid是否已经绑定过学生的个人信息
+     * 判断用户的openid是否已经绑定过
      */
-    public function checkuseropenid($openid){
-        $this->db->where('U_openid', $openid);
+    public function checkuseropenid($U_openid){
+        $this->db->where('U_openid', $U_openid);
         $result = $this->db->get('userinfo');
-        return $result->num_rows() > 0 ? true : false;
+        return $result->num_rows() > 0;
     }
 
     /**
      * @param $number
      * @return bool
-     * 检查用户提交的学号是否已经注册过
+     * 检查用户的学号是否已经绑定过
      */
-    public function checkusernumber($number){
-        $this->db->where('U_number', $number);
+    public function checkusernumber($U_number){
+        $this->db->where('U_number', $U_number);
         $result = $this->db->get('userinfo');
-        return $result->num_rows() > 0 ? true : false;
+        return $result->num_rows() > 0;
     }
 
     /**
      * @param $card
      * @return bool
-     * 检查用户的身份证号码是否已经注册过
+     * 检查用户的身份证号码是否已经绑定过
      */
-    public function checkusercard($card){
-        $this->db->where('U_card', $card);
+    public function checkusercard($U_card){
+        $this->db->where('U_card', $U_card);
         $result = $this->db->get('userinfo');
-        return $result->num_rows() > 0 ? true : false;
+        return $result->num_rows() > 0;
     }
 
     /**
      * @param $phone
      * @return bool
-     * 检查用户的手机号是否已经注册过
+     * 检查用户的手机号是否已经绑定过
      */
-    public function checkuserphone($phone){
-        $this->db->where('U_phone', $phone);
+    public function checkuserphone($U_phone){
+        $this->db->where('U_phone', $U_phone);
         $result = $this->db->get('userinfo');
-        return $result->num_rows() > 0 ? true : false;
+        return $result->num_rows() > 0;
     }
 
     /**

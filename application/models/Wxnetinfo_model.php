@@ -54,15 +54,10 @@ class Wxnetinfo_model extends CI_Model
             return false;
         }
     }
-    public function get_net_state($openid){
+    public function getStateByOpenId($openid){
         $this->db->where('N_openid',$openid);
-        $this->db->select('N_state');
         $state=$this->db->get('netinfo')->row_array()['N_state'];
-        if($state!=2){
-            return false;
-        }else{
-            return true;
-        }
+        return $state;
     }
 
     public function searchByNetState($state){
