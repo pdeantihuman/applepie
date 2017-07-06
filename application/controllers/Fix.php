@@ -150,7 +150,7 @@ class Fix extends CI_Controller
             $this->load->view('weixin/processed');
             exit;
         }
-        $data['fixUser']=$this->Wxfixuser_model->getallfixusername();
+        $data['fixUser']=$this->Wxfixuser_model->getAllUserNameExceptSelf($this->session->openid);
         $data['info']=$this->Wxfixorder_model->getfixlistbyid($id,$this->Wxfixorder_model->getfixopenidbyid($id));
         if(!$data['info']){
             show_404();
@@ -162,8 +162,9 @@ class Fix extends CI_Controller
         $this->load->view('weixin/fixinfoforfix',$data);
 
     }
+
     public function success(){
-        $this->load->view('success');
+        $this->load->view('weixin/success');
     }
 
 
@@ -264,43 +265,27 @@ class Fix extends CI_Controller
                     ];
                     echo json_encode($return);
                 }else{
-                    $data = [
-                        'Fof_foid' => $id,
-                        'Fof_fuOpenId' =>$this->Wxfixuser_model->getOpenIdByName($this->input->post('fixname')),
-                      /*  'Fof_time' =>time(),*/
-                        'Fof_message'=>$this->input->post('message'),
-                        'Fof_state' =>1
-                    ];
-                    if($this->Wxfixorderfollow_model->addfixorderfollow($data)){
-                        $url = "http://weixin.smell.ren/fix/fixer/".$data['Fof_foid'];
-                        $fixinfo = $this->Wxfixorder_model->getfixinfobyid($data['Fof_foid']);
+                    $Fu_openid = $this->Wxfixuser_model->getOpenIdByName($this->input->post('fixname'));
+                    $return1= $this->Wxfixorderfollow_model->tranasferOut($id,$this->input->post('message'));
+                    $return2= $this->Wxfixorderfollow_model->transferIn($id,$Fu_openid);
+//                    $data = [
+//                        'Fof_foid' => $id,
+//                        'Fof_fuOpenId' =>$this->Wxfixuser_model->getOpenIdByName($this->input->post('fixname')),
+//                      /*  'Fof_time' =>time(),*/
+//                        'Fof_message'=>$this->input->post('message'),
+//                        'Fof_state' =>2
+//                    ];
+                    if($return1 and $return2){
+                        $fixinfo = $this->Wxfixorder_model->getfixinfobyid($id);
                         $address = $this->Wxuserinfo_model->getuerinfobyopenid($fixinfo['Fo_openid'])['U_dormitory'];
-                        $datatmp = [
-                            "touser"=>$data['Fof_fuOpenId'],
-                            "template_id"=>'Vl9mHjDrg49ifhkZAYmLBGM-zbeC3-Jz93clPmfjS2I',
-                            "url"=>$url,
-                            "topcolor"=>"#FF0000",
-                            "data"=>[
-                                'message'=>[
-                                    'value'=>$fixinfo['Fo_comment'],
-                                    "color"=>"#173177"
-                                ],
-                                'time'=>[
-                                    'value'=>$fixinfo['Fo_time'],
-                                    "color"=>"#173177"
-                                ],
-                                'address'=>[
-                                    'value'=>$address,
-                                    "color"=>"#173177"
-                                ],
-                            ]
-                        ];
-                        $this->ci_wechat->sendTemplateMessage($datatmp);
+                        $this->WxWeChatFunction_model->sendFixInfoForFixUser($id,$Fu_openid,$fixinfo['Fo_comment'],$fixinfo['Fo_time'],$address);
                         $return=[
                             'state'=> 'success',
                             'link' =>"/fix/success"
                         ];
                         echo json_encode($return);
+                    }else{
+                        show_404();
                     }
                 }
                 break;
@@ -313,15 +298,15 @@ class Fix extends CI_Controller
                     ];
                     echo json_encode($return);
                 }else{
-                    $data = [
-                        'Fof_foid' => $id,
-                        'Fof_fuOpenId' =>$this->session->openid,
-                        /*'Fof_time' =>time(),*/
-                        'Fof_message'=>'完成',
-                        'Fof_state' =>2,
-                        'Fof_result' =>2
-                    ];
-                    if($this->Wxfixorderfollow_model->addfixorderfollow($data)){
+//                    $data = [
+//                        'Fof_foid' => $id,
+//                        'Fof_fuOpenId' =>$this->session->openid,
+//                        /*'Fof_time' =>time(),*/
+//                        'Fof_message'=>'完成',
+//                        'Fof_state' =>2,
+//                        'Fof_result' =>2
+//                    ];
+                    if($this->Wxfixorderfollow_model->finishOrder($id,"暂且完成")){
                         $this->Wxfixorder_model->updatestate($id,3);
                         $return=[
                             'state'=> 'success',

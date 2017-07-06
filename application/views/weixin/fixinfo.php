@@ -156,8 +156,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <a>报修时间<span class="mui-pull-right"><?php echo $orderinfo['Fo_time']; ?></span></a>
                 </li>
                 <li class="mui-table-view-cell">
-                    <a>处理状态<span class="mui-pull-right"><?php echo '已提交';
-                            ?></span></a>
+                    <a>处理状态<span class="mui-pull-right">已提交</span></a>
                 </li>
                 <li class="mui-table-view-cell">
                     <a>报修类型<span class="mui-pull-right"><?php echo $orderinfo['Fo_type'];?></span></a>

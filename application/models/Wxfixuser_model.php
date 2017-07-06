@@ -27,6 +27,11 @@ class Wxfixuser_model extends CI_Model
         return $this->db->get('fixUser')->result_array();
     }
 
+    public function getAllUserNameExceptSelf($Fu_openid){
+        $this->db->select('Fu_openid');
+        $this->db->where('Fu_openid !=',$Fu_openid,false);
+        return $this->db->get('fixUser')->result_array;
+    }
 
     /**
      * 通过维修人员openid获取维修人员姓名

@@ -28,12 +28,8 @@ class Wxadminer_model extends CI_Model
     public function login($name, $pass){
         $this->db->where('A_name',$name);
         $this->db->where('A_pass',$pass);
-        $return = $this->db->get('adminer')->row_array();
-        if($return){
-            return true;
-        }else{
-            return false;
-        }
+        return $this->db->get('adminer')->num_rows()>0;
+
     }
 
     /**

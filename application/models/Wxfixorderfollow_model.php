@@ -13,6 +13,7 @@ class Wxfixorderfollow_model extends CI_Model
     {
         parent::__construct();
         $this->load->database();
+        $this->load->model('Wxfixorder_model');
     }
 
 
@@ -87,6 +88,43 @@ class Wxfixorderfollow_model extends CI_Model
         }
     }
 
+    public function initializeOrder($Fof_foid){
+        $data = [
+            'Fof_foid' => $Fof_foid,
+            'Fof_fuOpenId' => 0,
+            'Fof_message' => '系统收到你的报修申请'
+        ];
+        $this->db->insert('fixOrderFollow',$data);
+        return $this->db->affected_rows()>0;
+    }
+
+    public function tranasferOut($Foid, $Fof_message){
+        $newFollow = $this->getinfobyfoid(($Foid));
+        $newFollow['Fof_state'] = 2;
+        $newFollow['Fof_result'] = 1;
+        $newFollow['Fof_message'] = $Fof_message;
+        unset($newFollow['Fof_time']);
+        $this->db->insert('fixOrderFollow',$newFollow);
+    }
+
+    public function transferIn($Foid, $openid){
+        $data=[
+            'Fof_fuOpenId' => $openid,
+            'Fof_foid' => $Foid,
+            'Fof_message' => '正在处理',
+            'Fof_state'=> 1,
+        ];
+        $this->db->insert('fixOrderFollow',$data);
+    }
+
+    public function finishOrder($Foid, $Fof_message){
+        $newFollow = $this->getinfobyfoid(($Foid));
+        $newFollow['Fof_state'] = 2;
+        $newFollow['Fof_result'] = 2;
+        $newFollow['Fof_message'] = $Fof_message;
+        unset($newFollow['Fof_time']);
+        $this->db->insert('fixOrderFollow',$newFollow);
+    }
     /**
      * @param $data
      * @return bool
@@ -94,12 +132,7 @@ class Wxfixorderfollow_model extends CI_Model
      */
     public function addfixorderfollow($data){
         $return = $this->db->insert('fixOrderFollow',$data);
-        $this->db->where('Foid',$data['Fof_foid']);
-        $fo = $this->db->get('fixOrder')->row_array();
-        $this->db->where('Foid',$data['Foid']);
-        $this->db->set('Fo_priority',$fo['Fo_priority']+1);
-        $this->db->update('fixOrder');
-
-        return $return ? true : false;
+        $return = $this->db->affected_rows()>0;
+        return $return and $this->Wxfixorder_model->raisePriorityById($data['Fof_foid']);
     }
 }

@@ -19,6 +19,7 @@ class Fix extends CI_Controller
         $this->load->model('Wxuserinfo_model');
         $this->load->model('Wxfixuser_model');
         $this->load->model('Wxfixorderfollow_model');
+        $this->load->model('WxWeChatFunction_model');
     }
 
     /**
@@ -42,13 +43,13 @@ class Fix extends CI_Controller
         if($this->check_is_adminer()){
             exit;
         }else{
-            if(!$data['list'] = $this->Wxfixorder_model->getfixlistbystate('1')){
+            $data['list'] = $this->Wxfixorder_model->getUnTreatedOrder();
+            if(is_null($data['list'])){
                 echo "没有需要处理的数据";
                 exit;
             }
             for($i=0;$i<count($data['list']);$i++){
-                $userinfo = $this->Wxuserinfo_model->getuerinfobyopenid($data['list'][$i]['Fo_openid']);
-                $data['list'][$i]['userinfo']=$userinfo;
+                $data['list'][$i]['userinfo'] = $this->Wxuserinfo_model->getuerinfobyopenid($data['list'][$i]['Fo_openid']);
             }
 //            print_r($data['list'][0]['userinfo']);
 //            exit;
@@ -170,38 +171,25 @@ class Fix extends CI_Controller
                 'Fof_fuOpenId' =>$this->Wxfixuser_model->getOpenIdById($Fuid),
 /*                'Fof_time' =>time(),*/
                 'Fof_message'=>'管理员分配维修人员',
-                'Fof_state' =>1,
+                'Fof_state' =>2,
                 'Fof_result' =>1
             ];
             if($this->Wxfixorderfollow_model->addfixorderfollow($data)){
                 $this->Wxfixorder_model->updatestate($Foid,'2');
-                $url = "http://weixin.smell.ren/fix/fixer/".$data['Fof_foid'];
                 $fixinfo = $this->Wxfixorder_model->getfixinfobyid($data['Fof_foid']);
                 $address = $this->Wxuserinfo_model->getuerinfobyopenid($fixinfo['Fo_openid'])['U_dormitory'];
-                $datatmp = [
-                    "touser"=>$data['Fof_fuOpenId'],
-                    "template_id"=>'Vl9mHjDrg49ifhkZAYmLBGM-zbeC3-Jz93clPmfjS2I',
-                    "url"=>$url,
-                    "topcolor"=>"#FF0000",
-                    "data"=>[
-                        'message'=>[
-                            'value'=>$fixinfo['Fo_comment'],
-                            "color"=>"#173177"
-                        ],
-                        'time'=>[
-                            'value'=>$fixinfo['Fo_time'],
-                            "color"=>"#173177"
-                        ],
-                        'address'=>[
-                            'value'=>$address,
-                            "color"=>"#173177"
-                        ],
-                    ]
-                ];
-                $this->ci_wechat->sendTemplateMessage($datatmp);
+                $this->WxWeChatFunction_model->sendFixInfoForFixUser($data['Fof_foid'],$data['Fof_fuOpenId'],$fixinfo['Fo_comment'],$fixinfo['Fo_time'],$address);
                 $return = [
                     'state' => 1,
                     'message' => "成功",
+                ];
+                $return = json_encode($return);
+                echo $return;
+            }else
+            {
+                $return = [
+                    'state' => 2,
+                    'message' => '指定失败'
                 ];
                 $return = json_encode($return);
                 echo $return;

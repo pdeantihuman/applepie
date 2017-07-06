@@ -260,7 +260,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     var returnbtn = document.getElementById("returnbtn");
     var overbtn = document.getElementById("overbtn");
 
-    returnbtn.addEventListener("tap",function(enent) {
+    returnbtn.addEventListener("tap",function(event) {
         var info = {
             fixname : fixname.value,
             message : message.value
@@ -288,7 +288,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     });
 
-    overbtn.addEventListener("tap",function(enent) {
+    overbtn.addEventListener("tap",function(event) {
 
         mui.post(addurl,{
                 key:"overfollow",

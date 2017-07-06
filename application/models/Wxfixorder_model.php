@@ -13,6 +13,7 @@ class Wxfixorder_model extends CI_Model
     {
         parent::__construct();
         $this->load->database();
+        $this->load->model('Wxfixorderfollow_model');
     }
 
     /**
@@ -38,21 +39,24 @@ class Wxfixorder_model extends CI_Model
      * 添加一条报修信息
      */
     public function add($data){
-        $return = $this->db->insert('fixOrder',$data);
-        $this->db->where('Fo_openid',$data['Fo_openid']);
-        $this->db->order_by('Fo_time','DESC');
-        $fo = $this->db->get('fixOrder')->row_array();
-
-
-        $initial = [
-            'Fof_foid' => $fo['Foid'],
-            'Fof_fuOpenId' => 0,
-            'Fof_message' => '系统收到你的报修申请'
-        ];
-        $this->db->insert('fixOrderFollow',$initial);
-        return $return ? true : false;
+        $this->db->insert('fixOrder',$data);
+        $return = $this->db->affected_rows()>0;
+        $id =  $this->getIdByOpenId($data['Fo_openid']);
+        return $return and $this->Wxfixorderfollow_model->initializeOrder($id);
     }
 
+    public function getIdByOpenId($openid){
+        $this->db->where('Fo_openid',$openid);
+        $this->db->order_by('Fo_time','DESC');
+        return $this->db->get('fixOrder')->row_array()['Foid'];
+    }
+
+    public function raisePriorityById($Foid){
+        $this->db->where('Foid',$Foid);
+        $this->db->set('Fo_priority', 'Fo_priority + 1', FALSE);
+        $this->db->update('fixOrder');
+        return $this->db->affected_rows()>0;
+    }
 
     /**
      * @param $openid
@@ -126,7 +130,7 @@ class Wxfixorder_model extends CI_Model
 
     /**
      * @param $state
-     * @return bool
+     * @return mixed
      * 根据订单状态查询订单信息
      */
     public function getfixlistbystate($state){
@@ -138,6 +142,14 @@ class Wxfixorder_model extends CI_Model
         }else{
             return false;
         }
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getUnTreatedOrder(){
+        return $this->getfixlistbystate(1);
     }
 
 

@@ -24,11 +24,7 @@ class Index extends CI_Controller
      */
     private function check_is_adminer() {
         $admin = $this->session->admin;
-        if(is_null($admin)){
-            return true;
-        }else{
-            return false;
-        }
+        return is_null($admin);
     }
 
     /**
@@ -51,6 +47,8 @@ class Index extends CI_Controller
 
     /**
      *登录操作
+     * 登录成功state=1, session的admin设为用户名, 返回管理员页面链接
+     * 登录失败state=2
      */
     public function login(){
         $name=$this->input->post('username');

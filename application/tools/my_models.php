@@ -28,6 +28,7 @@
  * @property Readexcel_model   $Readexcel_model
  * @property Wxmenu_model   $Wxmenu_model
  * @property Weixin_model   $Weixin_model
+ * @property WxWeChatFunction_model  $WxWeChatFunction_model
  *
  *
  *
