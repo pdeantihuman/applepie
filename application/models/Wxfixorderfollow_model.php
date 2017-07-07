@@ -23,7 +23,7 @@ class Wxfixorderfollow_model extends CI_Model
      */
     public function getinfobyfoid($foid){
         $this->db->where('Fof_foid',$foid);
-        $this->db->order_by('Fof_time','DESC');
+        $this->db->order_by('Fofid','DESC');
         $result = $this->db->get('fixOrderFollow')->result_array();
         return $result ? $result : false;
     }
