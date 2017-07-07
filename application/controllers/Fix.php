@@ -122,6 +122,17 @@ class Fix extends CI_Controller
         $data['orderinfo'] = $oderinfo;
         $this->load->view('weixin/fixinfo',$data);
     }
+    public function checkId($id)
+    {
+        $openid = $this->session->openid;
+        $openid2 = $this->Wxfixorder_model->getfixopenidbyid($id);
+        if($openid == $openid2) {
+            return false;
+        }else{
+            return true;
+        }
+
+    }
 
     /**
      * @param $id
@@ -129,7 +140,13 @@ class Fix extends CI_Controller
      */
     public function fixinfobyid($id)
     {
-        if(!$this->_checkuser()){//TODO：需要按照查看订单施工
+        if(!$this->_checkuser()){
+            exit;
+        }
+        if(!$this->checkopenid()){
+            exit;
+        }
+        if($this->checkId($id)){
             exit;
         }
         $data['info']=$this->Wxfixorder_model->getfixlistbyid($id,$this->session->openid);
