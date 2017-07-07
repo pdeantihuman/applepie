@@ -126,6 +126,10 @@ class Fix extends CI_Controller
     {
         $openid = $this->session->openid;
         $openid2 = $this->Wxfixorder_model->getfixopenidbyid($id);
+        if($this->Wxfixorderfollow_model->accessToRead($id,$openid)){
+            return false;
+        }
+ //       $access = $this->Wxfixorderfollow_model->accessToRead($id,$openid);
         if($openid == $openid2) {
             return false;
         }else{
@@ -149,11 +153,12 @@ class Fix extends CI_Controller
         if($this->checkId($id)){
             exit;
         }
-        $data['info']=$this->Wxfixorder_model->getfixlistbyid($id,$this->session->openid);
-        if(!$data['info']){
-            show_404();
-            exit;
-        }
+        $session = $this->Wxfixorder_model->getfixopenidbyid($id);
+        $data['info']=$this->Wxfixorder_model->getfixlistbyid($id,$session);
+//        if(!$data['info']){
+//            show_404();
+//            exit;
+//       }
         $data['JS']=$this->ci_wechat->getJsSign('http://weixin.smell.ren/');
         $data['fixOrderFollow']=$this->Wxfixorderfollow_model->getinfobyfoid($id);
         $this->load->view('weixin/fixinfobyid',$data);
