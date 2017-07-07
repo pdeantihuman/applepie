@@ -165,7 +165,7 @@ class Fix extends CI_Controller
             exit;
         }else{
             $Fuid=$this->input->post('id');
-            $Foid=$this->input->post('fid');
+            $Foid=$this->input->post('fid');//TODO:需要验证订单是否被指派过
             $data = [
                 'Fof_foid' => $Foid,
                 'Fof_fuOpenId' =>$this->Wxfixuser_model->getOpenIdById($Fuid),
@@ -175,7 +175,7 @@ class Fix extends CI_Controller
                 'Fof_result' =>1
             ];
             if($this->Wxfixorderfollow_model->addfixorderfollow($data)){
-                $this->Wxfixorder_model->updatestate($Foid,'2');
+                $this->Wxfixorder_model->updatestate($Foid,'2');//TODO：添加两条订单跟踪
                 $fixinfo = $this->Wxfixorder_model->getfixinfobyid($data['Fof_foid']);
                 $address = $this->Wxuserinfo_model->getuerinfobyopenid($fixinfo['Fo_openid'])['U_dormitory'];
                 $this->WxWeChatFunction_model->sendFixInfoForFixUser($data['Fof_foid'],$data['Fof_fuOpenId'],$fixinfo['Fo_comment'],$fixinfo['Fo_time'],$address);

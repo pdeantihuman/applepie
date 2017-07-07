@@ -126,9 +126,7 @@ class BindApi extends CI_Controller
             echo json_encode($return);
             exit;
         }
-        if($this->Wxverification_model->setstate($data['U_number'])){
-
-        }
+        $this->Wxverification_model->setstate($data['U_number']);
         if($this->Wxuserinfo_model->adduserinfo($data)){
 
             $return=[

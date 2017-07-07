@@ -125,8 +125,7 @@ class Wxuserinfo_model extends CI_Model
      */
     public function checkuseropenid($U_openid){
         $this->db->where('U_openid', $U_openid);
-        $result = $this->db->get('userinfo');
-        return $result->num_rows() > 0;
+        return $this->db->get('userinfo')->num_rows()>0;
     }
 
     /**

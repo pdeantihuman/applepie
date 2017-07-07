@@ -42,8 +42,8 @@ class Wxverification_model extends CI_Model
     public function setstate($number){
         $this->db->set('V_state','2');
         $this->db->where('V_number',$number);
-        $return = $this->db->update('verification');
-        return $return ? true : false;
+        $this->db->update('verification');
+        return $this->db->affected_rows()>0;
     }
 
     /**

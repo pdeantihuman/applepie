@@ -127,8 +127,9 @@ class Fix extends CI_Controller
      * @param $id
      * 查询单条维修记录的信息
      */
-    public function fixinfobyid($id){
-        if(!$this->_checkuser()){
+    public function fixinfobyid($id)
+    {
+        if(!$this->_checkuser()){//TODO：需要按照查看订单施工
             exit;
         }
         $data['info']=$this->Wxfixorder_model->getfixlistbyid($id,$this->session->openid);
@@ -177,7 +178,7 @@ class Fix extends CI_Controller
     }
 
     public function success(){
-        $this->load->view('weixin/success');
+        $this->load->view('weixin/success');//TODO:需要一个提示成功的页面
     }
 
 
@@ -305,10 +306,10 @@ class Fix extends CI_Controller
                     echo json_encode($return);
                 }else{
                     if($this->Wxfixorderfollow_model->finishOrder($id,"暂且完成",$this->session->openid)){
-                        $this->Wxfixorder_model->updatestate($id,3);
+                        $this->Wxfixorder_model->updatestate($id,'3');
                         $return=[
                             'state'=> 'success',
-                            'link' =>"/fix/success"
+                            'link' =>"/fix/success"//TODO：转操作成功
                         ];
                         echo json_encode($return);
                     }
