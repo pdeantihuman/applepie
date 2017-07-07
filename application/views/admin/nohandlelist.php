@@ -35,6 +35,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <tbody>
 
     <?php foreach ($list as $data): ?>
+        <?php if(!isset($data['Fo_time']))break;?>
         <tr>
             <td><?php echo $data['userinfo']['U_dormitory'];?></td>
             <td><?php echo $data['userinfo']['U_name'];?></td>

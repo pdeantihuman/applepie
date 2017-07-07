@@ -44,7 +44,7 @@ class Fix extends CI_Controller
             exit;
         }else{
             $data['list'] = $this->Wxfixorder_model->getUnTreatedOrder();
-            if(is_null($data['list']['Fo_time'])){
+            if(is_null($data['list'])){
                 echo "没有需要处理的数据";
                 exit;
             }
@@ -171,7 +171,7 @@ class Fix extends CI_Controller
                 'Fof_fuOpenId' =>$this->Wxfixuser_model->getOpenIdById($Fuid),
 /*                'Fof_time' =>time(),*/
                 'Fof_message'=>'管理员分配维修人员',
-                'Fof_state' =>2,
+                'Fof_state' =>1,
                 'Fof_result' =>1
             ];
             if($this->Wxfixorderfollow_model->addfixorderfollow($data)){

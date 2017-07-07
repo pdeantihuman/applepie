@@ -126,6 +126,7 @@ class Wxfixorder_model extends CI_Model
         $this->db->where('Foid',$id);
         $this->db->set('Fo_state', $state);
         $this->db->update('fixOrder');
+        return $this->db->affected_rows()>0;
     }
 
     /**

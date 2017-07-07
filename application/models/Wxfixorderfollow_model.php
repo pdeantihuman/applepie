@@ -47,7 +47,7 @@ class Wxfixorderfollow_model extends CI_Model
     public function getstatebyfoid($foid, $openid){
         $this->db->where('Fof_foid', $foid);
         $this->db->where('Fof_fuopenid', $openid);
-        $this->db->order_by('Fofid','DESC');
+        $this->db->order_by('Fof_time','DESC');
         $this->db->limit(1);
         $this->db->select('Fof_state');
         $result = $this->db->get('fixOrderFollow')->row_array()['Fof_state'];
@@ -61,6 +61,61 @@ class Wxfixorderfollow_model extends CI_Model
             default:
                 return true;
                 break;
+        }
+    }
+
+
+    /**
+     * @param $foid
+     * @param $openid
+     * @return bool
+     * hasProcessed返回true的条件：关于该订单，你的最后一条follow状态为2
+     */
+    public function hasProcessed($foid, $openid){
+        $this->db->where('Fof_foid',$foid);
+        $this->db->where('Fof_fuOpenId',$openid);
+        $this->db->order_by('Fof_time','DESC');
+        return $this->db->get('fixOrderFollow')->row_array()['Fof_state']==2;
+    }
+
+
+    /**
+     * @param $foid
+     * @param $openid
+     * @return bool
+     * 获得读权限的条件是openid曾是处理人
+     */
+    public function accessToRead($foid, $openid){
+        $this->db->where('Fof_foid',$foid);
+        $this->db->where('Fof_fuOpenId',$openid);
+        return $this->db->get('fixOrderFollow')->num_rows()>0;
+    }
+
+
+    /**
+     * @param $foid
+     * @param $openid
+     * @return bool
+     * 获得控制权限的条件是，订单状态不为完成，最新的订单跟踪处理人是openid
+     */
+    public function accessToControl($foid, $openid){
+        $this->db->where('Fof_foid',$foid);
+        $this->db->order_by('Fofid','DESC');
+        $data = $this->db->get('fixOrderFollow')->row_array();
+        if (is_null($data)){
+            return false;
+        }
+
+        else{
+            if ($data['Fof_result'] == 2) {
+                return false;
+            } else {
+                if ($openid == $data['Fof_fuOpenId']) {
+                    return true;
+                } else{
+                    return false;
+                }
+            }
         }
     }
 
@@ -88,6 +143,20 @@ class Wxfixorderfollow_model extends CI_Model
         }
     }
 
+    public function accessToOrder($Fof_foid, $openid){
+        $this->db->where('Fof_foid',$Fof_foid);
+        $this->db->where('Fof_fuOpenId',$openid);
+        $this->db->order_by('Fof_time','DESC');
+        $return=$this->db->get('fixOrderFollow')->row_array()['Fof_state'];
+        if (isset($return)){
+            if ($return == 1)
+                return true;
+            else
+                return false;
+        }else
+            return false;
+    }
+
     public function initializeOrder($Fof_foid){
         $data = [
             'Fof_foid' => $Fof_foid,
@@ -98,13 +167,16 @@ class Wxfixorderfollow_model extends CI_Model
         return $this->db->affected_rows()>0;
     }
 
-    public function tranasferOut($Foid, $Fof_message){
-        $newFollow = $this->getinfobyfoid(($Foid));
-        $newFollow['Fof_state'] = 2;
-        $newFollow['Fof_result'] = 1;
-        $newFollow['Fof_message'] = $Fof_message;
-        unset($newFollow['Fof_time']);
-        $this->db->insert('fixOrderFollow',$newFollow);
+    public function tranasferOut($Foid, $Fof_message,$openid){
+        $date =[
+            'Fof_foid' => $Foid,
+            'Fof_fuOpenId' => $openid,
+            'Fof_message' => $Fof_message,
+            'Fof_state' => 2,
+            'Fof_result' => 1
+        ];
+        $this->db->insert('fixOrderFollow',$date);
+        return $this->db->affected_rows()>0;
     }
 
     public function transferIn($Foid, $openid){
@@ -115,15 +187,19 @@ class Wxfixorderfollow_model extends CI_Model
             'Fof_state'=> 1,
         ];
         $this->db->insert('fixOrderFollow',$data);
+        $this->Wxfixorder_model->raisePriorityById($Foid);
+        return $this->db->affected_rows()>0;
     }
 
-    public function finishOrder($Foid, $Fof_message){
-        $newFollow = $this->getinfobyfoid(($Foid));
-        $newFollow['Fof_state'] = 2;
-        $newFollow['Fof_result'] = 2;
-        $newFollow['Fof_message'] = $Fof_message;
-        unset($newFollow['Fof_time']);
-        $this->db->insert('fixOrderFollow',$newFollow);
+    public function finishOrder($Foid, $Fof_message,$openid){
+        $data = [
+            'Fof_foid' => $Foid,
+            'Fof_fuOpenId' => $openid,
+            'Fof_message' => $Fof_message,
+            'Fof_state' => 2,
+            'Fof_result' =>2
+        ];
+        $this->db->insert('fixOrderFollow',$data);
     }
     /**
      * @param $data
