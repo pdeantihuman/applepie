@@ -122,6 +122,17 @@ class Fix extends CI_Controller
         $data['orderinfo'] = $oderinfo;
         $this->load->view('weixin/fixinfo',$data);
     }
+    public function checkId($id)
+    {
+        $openid = $this->session->openid;
+        $openid2 = $this->Wxfixorder_model->getfixopenidbyid($id);
+        if($openid == $openid2) {
+            return false;
+        }else{
+            return true;
+        }
+
+    }
 
     /**
      * @param $id
@@ -129,28 +140,24 @@ class Fix extends CI_Controller
      */
     public function fixinfobyid($id)
     {
-        if ($this->checkopenid()) {
+        if(!$this->_checkuser()){
             exit;
         }
-        else if (!($this->session->openid == $this->Wxfixorder_model->getfixopenidbyid($id))) {
+        if(!$this->checkopenid()){
             exit;
         }
-        else {
-                if (!$this->_checkuser()) {
-                    exit;
-                }
-                $data['info'] = $this->Wxfixorder_model->getfixlistbyid($id, $this->session->openid);
-                if (!$data['info']) {
-                    show_404();
-                    exit;
-                }
-                $data['JS'] = $this->ci_wechat->getJsSign('http://weixin.smell.ren/');
-                $data['fixOrderFollow'] = $this->Wxfixorderfollow_model->getinfobyfoid($id);
-                $this->load->view('weixin/fixinfobyid', $data);
-            }
-
+        if($this->checkId($id)){
+            exit;
+        }
+        $data['info']=$this->Wxfixorder_model->getfixlistbyid($id,$this->session->openid);
+        if(!$data['info']){
+            show_404();
+            exit;
+        }
+        $data['JS']=$this->ci_wechat->getJsSign('http://weixin.smell.ren/');
+        $data['fixOrderFollow']=$this->Wxfixorderfollow_model->getinfobyfoid($id);
+        $this->load->view('weixin/fixinfobyid',$data);
     }
-
     private function transfer($id,$message ,$OutOpenId, $InOpenId){
         $return1= $this->Wxfixorderfollow_model->tranasferOut($id,$message,$OutOpenId);
         $return2= $this->Wxfixorderfollow_model->transferIn($id,$InOpenId);
