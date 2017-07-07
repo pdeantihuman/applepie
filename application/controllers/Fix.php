@@ -200,7 +200,7 @@ class Fix extends CI_Controller
     }
 
     public function success(){
-        $this->load->view('weixin/success');//TODO:需要一个提示成功的页面
+        $this->load->view('weixin/truesuccess');//TODO:需要一个提示成功的页面
     }
 
 
