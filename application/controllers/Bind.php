@@ -53,11 +53,8 @@ class Bind extends CI_Controller{
             exit;
         }
         if($this->Wxuserinfo_model->checkuseropenid($this->session->openid)){
-            $data['userinfo']=$this->Wxuserinfo_model->getuerinfobyopenid($this->session->openid);
-
-            $data['netstate']= $this->Wxnetinfo_model->getstate($this->session->openid);
-            $data['JS']=$this->ci_wechat->getJsSign('http://weixin.smell.ren/ur/bind');//TODO:header跳转到用户中心
-            $this->load->view('weixin/userinfo',$data);
+            $url = $this->ci_wechat->getOauthRedirect("http://weixin.smell.ren/url/ucenter");
+            header("location:$url");
         }else{
             $data['profession']=$this->Sysconfig_model->getProfession();
             $data['instructor']=$this->Sysconfig_model->getInstructor();
