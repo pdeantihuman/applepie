@@ -18,8 +18,8 @@ class Fix extends CI_Controller
         $this->load->helper('url');
         $this->load->library('CI_Wechat');
         $this->load->model('Wxfixorder_model');
-        $this->load->model('Wxuserinfo_model');
-        $this->load->model('Wxnetinfo_model');
+        $this->load->model('WxUserInfo_model');
+        $this->load->model('WxNetInfo_model');
         $this->load->model('Wxfixuser_model');
         $this->load->model('Wxfixorderfollow_model');
         $this->load->model('WxWeChatFunction_model');
@@ -52,7 +52,7 @@ class Fix extends CI_Controller
      *检查用户是否绑定了微信
      */
     private function _checkuser(){
-        if($this->Wxuserinfo_model->checkuseropenid($this->session->openid)) {
+        if($this->WxUserInfo_model->checkuseropenid($this->session->openid)) {
             return true;
         }else{
             return false;
@@ -60,13 +60,13 @@ class Fix extends CI_Controller
     }
 
 
-    /**
-     * 判断用户是否是维修人员
-     * @return bool
-     */
-    private function isFixUser(){
-        return $this->Wxfixuser_model->checkFixUserByOpenId($this->session->openid);
-    }
+//    /**
+//     * 判断用户是否是维修人员
+//     * @return bool
+//     */
+//    private function isFixUser(){
+//        return $this->Wxfixuser_model->checkFixUserByOpenId($this->session->openid);
+//    }
 
     /**
      *报修主界面
@@ -77,7 +77,7 @@ class Fix extends CI_Controller
         }
         if($this->_checkuser()){
 //            if ($this->isFixUser())
-//                $this->load->view('weixin/fixinfoforfix'); //TODO:需要一个维修人员的页面
+//                $this->load->view('weixin/fixinfoforfix');
 //            else
                 $this->load->view('weixin/netfix');
         }else{
@@ -188,7 +188,7 @@ class Fix extends CI_Controller
                 }
                 $data['id']=$id;
                 $data['fixOrderFollow']=$this->Wxfixorderfollow_model->getinfobyfoid($id);
-                $data['address']=$this->Wxuserinfo_model->getuerinfobyopenid($this->Wxfixorder_model->getfixopenidbyid($id))['U_dormitory'];
+                $data['address']=$this->WxUserInfo_model->getInfoByOpenId($this->Wxfixorder_model->getfixopenidbyid($id))['U_dormitory'];
                 $this->load->view('weixin/fixinfoforfix',$data);
             }else{
                 $this->fixinfobyid($id);
@@ -218,7 +218,7 @@ class Fix extends CI_Controller
         if(is_null($key)){
             show_404();
         }
-        $state=$this->Wxnetinfo_model->getStateByOpenId($this->session->openid);
+        $state=$this->WxNetInfo_model->getStateByOpenId($this->session->openid);
         switch ($key){
             case 'fix':
                 switch ($state){
@@ -306,7 +306,7 @@ class Fix extends CI_Controller
                     $return =$this->transfer($id,$this->input->post('message') ,$this->session->openid,$Fu_openid);
                     if($return){
                         $fixinfo = $this->Wxfixorder_model->getfixinfobyid($id);
-                        $address = $this->Wxuserinfo_model->getuerinfobyopenid($fixinfo['Fo_openid'])['U_dormitory'];
+                        $address = $this->WxUserInfo_model->getInfoByOpenId($fixinfo['Fo_openid'])['U_dormitory'];
                         $this->WxWeChatFunction_model->sendFixInfoForFixUser($id,$Fu_openid,$fixinfo['Fo_comment'],$fixinfo['Fo_time'],$address);
                         $return=[
                             'state'=> 'success',
@@ -331,7 +331,7 @@ class Fix extends CI_Controller
                         $this->Wxfixorder_model->updatestate($id,'3');
                         $return=[
                             'state'=> 'success',
-                            'link' =>"/fix/success"//TODO：转操作成功
+                            'link' =>"/fix/success" //TODO：转操作成功
                         ];
                         echo json_encode($return);
                     }

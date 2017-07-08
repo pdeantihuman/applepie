@@ -28,7 +28,7 @@ class News extends CI_Controller
             show_404();
         }else{
         $data['list']= $this->Wxnews_model->listnewstitle($parm);
-        $data['title']=$this->Wxnewstag_model->getnamebyid($parm);
+        $data['title']=$this->Wxnewstag_model->getNameById($parm);
         $this->load->view('news/newslist',$data);
         }
     }

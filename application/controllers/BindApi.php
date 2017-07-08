@@ -14,7 +14,7 @@ class BindApi extends CI_Controller
     {
         parent::__construct();
         $this->load->library('session');
-        $this->load->model('Wxuserinfo_model');
+        $this->load->model('WxUserInfo_model');
         $this->load->model('Wxverification_model');
         if(!$this->session->openid){
             show_404();
@@ -52,7 +52,7 @@ class BindApi extends CI_Controller
             'U_phone'=>$U_phone,
             'U_grade'=>substr($U_number,0,2)
         ];
-        if($this->Wxuserinfo_model->checkuseropenid($data['U_openid'])){
+        if($this->WxUserInfo_model->checkuseropenid($data['U_openid'])){
             $return=[
                 'state'=> 'error',
                 'message' =>'你的微信号已经绑定过'
@@ -68,7 +68,7 @@ class BindApi extends CI_Controller
             echo json_encode($return);
             exit;
         }
-        if($this->Wxuserinfo_model->checkusernumber($data['U_number'])){
+        if($this->WxUserInfo_model->checkusernumber($data['U_number'])){
             $return=[
                 'state'=> 'error',
                 'message' =>'你的学号已经绑定过'
@@ -76,7 +76,7 @@ class BindApi extends CI_Controller
             echo json_encode($return);
             exit;
         }
-        if($this->Wxuserinfo_model->checkusercard($data['U_card'])){
+        if($this->WxUserInfo_model->checkusercard($data['U_card'])){
             $return=[
                 'state'=> 'error',
                 'message' =>'你的身份证号码已经绑定过'
@@ -84,7 +84,7 @@ class BindApi extends CI_Controller
             echo json_encode($return);
             exit;
         }
-        if($this->Wxuserinfo_model->checkuserphone($data['U_phone'])){
+        if($this->WxUserInfo_model->checkuserphone($data['U_phone'])){
             $return=[
                 'state'=> 'error',
                 'message' =>'你的手机号已经绑定过'
@@ -127,7 +127,7 @@ class BindApi extends CI_Controller
             exit;
         }
         $this->Wxverification_model->setstate($data['U_number']);
-        if($this->Wxuserinfo_model->adduserinfo($data)){
+        if($this->WxUserInfo_model->adduserinfo($data)){
 
             $return=[
                 'state'=> 'success',

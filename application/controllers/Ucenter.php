@@ -16,8 +16,8 @@ class Ucenter extends CI_Controller
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('CI_Wechat');
-        $this->load->model('Wxuserinfo_model');
-        $this->load->model('Wxnetinfo_model');
+        $this->load->model('WxUserInfo_model');
+        $this->load->model('WxNetInfo_model');
 
     }
 
@@ -38,14 +38,14 @@ class Ucenter extends CI_Controller
             if (!isset($accessToken['openid'])) {
                 return false;
             } else {
-                $userInfo = [
+                $data = [
                     'openid' => $accessToken['openid']
                 ];
-                $this->session->set_userdata($userInfo);
-                return true;
+                $this->session->set_userdata($data);
+                return isset($this->session->openid);
             }
-        }
-        return true;
+        } else
+            return true;
     }
 
     /**
@@ -53,7 +53,7 @@ class Ucenter extends CI_Controller
      */
     private function _checkuser()
     {
-        return $this->Wxuserinfo_model->checkuseropenid($this->session->openid);
+        return $this->WxUserInfo_model->checkuseropenid($this->session->openid);
     }
 
     /**
@@ -65,8 +65,9 @@ class Ucenter extends CI_Controller
             $this->denyAccess();
         } else {
             if ($this->_checkuser()) {
-                $data['userinfo'] = $this->Wxuserinfo_model->getuerinfobyopenid($this->session->openid);
-                $data['netinfo'] = $this->Wxnetinfo_model->getstate($this->session->openid);
+                $data['userinfo'] = $this->WxUserInfo_model->getInfoByOpenId($this->session->openid);
+                $data['netinfo'] = $this->WxNetInfo_model->getInfoByOpenId($this->session->openid);
+                unset($data['netinfo']['Nid']);
                 $data['url'] = $this->ci_wechat->getUserInfo($this->session->openid)['headimgurl'];
                 $this->load->view('weixin/ucenter', $data);
             } else {

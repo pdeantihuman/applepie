@@ -17,8 +17,8 @@ class Net extends CI_Controller
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('CI_Wechat');
-        $this->load->model('Wxuserinfo_model');
-        $this->load->model('Wxnetinfo_model');
+        $this->load->model('WxUserInfo_model');
+        $this->load->model('WxNetInfo_model');
     }
 
     /**
@@ -44,7 +44,7 @@ class Net extends CI_Controller
     }
 
     private function _checkuser(){
-        if($this->Wxuserinfo_model->checkuseropenid($this->session->openid)) {
+        if($this->WxUserInfo_model->checkuseropenid($this->session->openid)) {
             return true;
         }else{
             return false;
@@ -56,7 +56,7 @@ class Net extends CI_Controller
             exit;
         }
         if($this->_checkuser()){
-            if ($this->Wxnetinfo_model->getStateByOpenId($this->session->openid)==1)
+            if ($this->WxNetInfo_model->getStateByOpenId($this->session->openid)==1)
                 $this->load->view('weixin/netinfo');
             //检查用户已经开通了账户，下一步需要调用内网的借口进行查询剩余网费的信息
             else{
@@ -83,7 +83,7 @@ class Net extends CI_Controller
         //如果要你进行其他验证的话，请在这里进行代码的添加
 
 
-        if($this->Wxnetinfo_model->getStateByOpenId($this->session->openid)==4){
+        if($this->WxNetInfo_model->getStateByOpenId($this->session->openid)==4){
             $return=[
                 'state'=> 'error',
                 'message' =>'你已经提交过申请'
@@ -91,7 +91,7 @@ class Net extends CI_Controller
             echo json_encode($return);
             exit;
         }
-        if($this->Wxnetinfo_model->applicationByOpenId($this->session->openid)){
+        if($this->WxNetInfo_model->applicationByOpenId($this->session->openid)){
             $return=[
                 'state'=> 'success',
                 'link' =>'/url/bind'

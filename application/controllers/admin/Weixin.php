@@ -14,9 +14,9 @@ class Weixin extends CI_Controller
         parent::__construct();
         $this->load->library('session');
         $this->load->helper('url');
-        $this->load->model('Wxuserinfo_model');
+        $this->load->model('WxUserInfo_model');
         $this->load->library('CI_Wechat');
-        $this->load->model('Wxnetinfo_model');
+        $this->load->model('WxNetInfo_model');
         $this->load->model('Wxmenu_model');
     }
 

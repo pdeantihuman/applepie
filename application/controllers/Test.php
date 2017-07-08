@@ -14,8 +14,8 @@ class Test extends CI_Controller
         parent::__construct();
         $this->load->library('CI_Wechat');
         $this->load->model('Wxreply_model');
-        $this->load->model('Wxuserinfo_model');
-        $this->load->model('Wxnetinfo_model');
+        $this->load->model('WxUserInfo_model');
+        $this->load->model('WxNetInfo_model');
         $this->load->model('Wxverification_model');
         $this->load->model('Wxfixorder_model');
         $this->load->model('Sysconfig_model');
@@ -37,7 +37,7 @@ class Test extends CI_Controller
 //        print_r($this->ci_wechat->getMenu());
 //        $Vinfo=$this->Wxverification_model->setstate(1455228);
 //        print_r($Vinfo);
-//        $data = $this->Wxuserinfo_model->getuerinfobyopenid('oSeQ3t0MjUVaJ7kQLh_f4JWUAdx8');
+//        $data = $this->WxUserInfo_model->getInfoByOpenId('oSeQ3t0MjUVaJ7kQLh_f4JWUAdx8');
 //        print_r($data);
 
 //    print_r($this->Wxfixorder_model->getorderlist('oSeQ3t0MjUVaJ7kQLh_f4JWUAdx8'));
@@ -48,15 +48,15 @@ class Test extends CI_Controller
 //        echo '没有处理过';
 //    }
 //        print_r($this->Wxadminer_model->login('test','test'));
-//        print_r($this->Wxuserinfo_model->listuserinfo(1));
+//        print_r($this->WxUserInfo_model->listuserinfo(1));
 //        echo ceil(1005/10);
-//          print_r($this->Wxuserinfo_model->countGrade('16'));
-//        print_r($this->Wxnetinfo_model->getstate('oSeQ3t0MjUVaJ7kQLh_f4JWUAdx8'));
+//          print_r($this->WxUserInfo_model->countGrade('16'));
+//        print_r($this->WxNetInfo_model->getstate('oSeQ3t0MjUVaJ7kQLh_f4JWUAdx8'));
 //        echo substr('1651522558',0,2);
 //        print_r($this->Wxguestbook_model->listGuest('1'));
 //        print_r($this->Wxreply_model->listReplay());
 //        print_r($this->ci_wechat->getuserinfo('oSeQ3t-jMDB7mz3uVpx1U1BfSOLc'));
-//        print_r($this->Wxnewstag_model->getnamebyid('1'));
+//        print_r($this->Wxnewstag_model->getNameById('1'));
 //        $data['list']=$this->Wxnewstag_model->listtag();
 //        $data['news']=$this->Wxnews_model->getnewsbyid($data['list']['1']['Ntid']);
 //        print_r($data);

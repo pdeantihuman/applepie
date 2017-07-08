@@ -15,9 +15,9 @@
  * @property Wxreply_model      $Wxreply_model
  * @property Wxguestbook_model  $Wxguestbook_model
  * @property Wxconcern_model    $Wxconcern_model
- * @property Wxuserinfo_model    $Wxuserinfo_model
+ * @property WxUserInfo_model    $WxUserInfo_model
  * @property Wxverification_model    $Wxverification_model
- * @property Wxnetinfo_model    $Wxnetinfo_model
+ * @property WxNetInfo_model    $WxNetInfo_model
  * @property Wxfixorder_model    $Wxfixorder_model
  * @property Sysconfig_model    $Sysconfig_model
  * @property Wxfixuser_model    $Wxfixuser_model

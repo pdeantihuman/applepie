@@ -16,9 +16,9 @@ class Bind extends CI_Controller{
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('CI_Wechat');
-        $this->load->model('Wxuserinfo_model');
+        $this->load->model('WxUserInfo_model');
         $this->load->model('Sysconfig_model');
-        $this->load->model('Wxnetinfo_model');
+        $this->load->model('WxNetInfo_model');
 
 
     }//....
@@ -52,7 +52,7 @@ class Bind extends CI_Controller{
         if(!$this->checkopenid()){
             exit;
         }
-        if($this->Wxuserinfo_model->checkuseropenid($this->session->openid)){
+        if($this->WxUserInfo_model->checkuseropenid($this->session->openid)){
             $url = $this->ci_wechat->getOauthRedirect("http://weixin.smell.ren/url/ucenter");
             header("location:$url");
         }else{

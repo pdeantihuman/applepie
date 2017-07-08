@@ -14,8 +14,8 @@ class Search extends CI_Controller
         parent::__construct();
         $this->load->library('session');
         $this->load->helper('url');
-        $this->load->model('Wxuserinfo_model');
-        $this->load->model('Wxnetinfo_model');
+        $this->load->model('WxUserInfo_model');
+        $this->load->model('WxNetInfo_model');
     }
 
     /**
@@ -51,13 +51,13 @@ class Search extends CI_Controller
 //                show_404();
 //                exit;
 //            }
-            $return=$this->Wxuserinfo_model->searchbynumber($number);
+            $return=$this->WxUserInfo_model->searchbynumber($number);
 //            if(!$return){
  //               show_404();TODO:假如用户没有查询到数据，应该显示提示信息，而不是转404
 //                exit;
 //            }
             $data['userinfo']=$return;
-            $data['userinfo']['state']=$this->Wxnetinfo_model->getstate($data['userinfo']['U_openid'])['N_state'];
+            $data['userinfo']['state']=$this->WxNetInfo_model->getInfoByOpenId($data['userinfo']['U_openid'])['N_state'];
             $this->load->view('admin/searchuser',$data);
         }
     }

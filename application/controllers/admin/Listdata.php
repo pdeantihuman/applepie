@@ -16,8 +16,8 @@ class Listdata extends CI_Controller
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('CI_Wechat');
-        $this->load->model('Wxuserinfo_model');
-        $this->load->model('Wxnetinfo_model');
+        $this->load->model('WxUserInfo_model');
+        $this->load->model('WxNetInfo_model');
         $this->load->model('Wxguestbook_model');
         $this->load->model('Wxreply_model');
         $this->load->model('Wxverification_model');
@@ -45,11 +45,11 @@ class Listdata extends CI_Controller
         if ($this->check_is_adminer()) {
             exit;
         } else {
-            $data['listuserinfo'] = $this->Wxuserinfo_model->listuserinfo($page);
+            $data['listuserinfo'] = $this->WxUserInfo_model->listuserinfo($page);
             for($i=0;$i<count($data['listuserinfo']);$i++){
-                $data['listuserinfo'][$i]['state']=$this->Wxnetinfo_model->getstate($data['listuserinfo'][$i]['U_openid'])['N_state'];
+                $data['listuserinfo'][$i]['state']=$this->WxNetInfo_model->getInfoByOpenId($data['listuserinfo'][$i]['U_openid'])['N_state'];
             }
-            $data['count'] = $this->Wxuserinfo_model->listuserinfocount();
+            $data['count'] = $this->WxUserInfo_model->listuserinfocount();
 //            if($data['count']==0)
 //            {
 //                $this->load->view('admin/index');
@@ -70,7 +70,7 @@ class Listdata extends CI_Controller
             exit;
         } else {
                 $Uid=$this->input->post('id');
-            $check=$this->Wxuserinfo_model->del($Uid);
+            $check=$this->WxUserInfo_model->del($Uid);
             if ($check) {
                 $return = [
                     'state' => 1,
@@ -127,13 +127,13 @@ class Listdata extends CI_Controller
         if ($this->check_is_adminer()) {
             exit;
         } else {
-            $data['man']=$this->Wxuserinfo_model->countSex('男');
-            $data['woman']=$this->Wxuserinfo_model->countSex('女');
-            $data['garde14']=$this->Wxuserinfo_model->countGrade('14');
-            $data['garde15']=$this->Wxuserinfo_model->countGrade('15');
-            $data['garde16']=$this->Wxuserinfo_model->countGrade('16');
+            $data['man']=$this->WxUserInfo_model->countSex('男');
+            $data['woman']=$this->WxUserInfo_model->countSex('女');
+            $data['garde14']=$this->WxUserInfo_model->countGrade('14');
+            $data['garde15']=$this->WxUserInfo_model->countGrade('15');
+            $data['garde16']=$this->WxUserInfo_model->countGrade('16');
             $data['nobinded']=$this->Wxverification_model->countstate('1');
-            $data['binded']=$this->Wxuserinfo_model->listuserinfocount();
+            $data['binded']=$this->WxUserInfo_model->listuserinfocount();
             $this->load->view('admin/statistics',$data);
         }
 
@@ -150,7 +150,7 @@ class Listdata extends CI_Controller
         } else {
             $data['list'] = $this->Wxguestbook_model->listGuest($page);
             for($i=0;$i<count($data['list']);$i++){
-                $name = $this->Wxuserinfo_model->getuerinfobyopenid($data['list'][$i]['g_openid']);
+                $name = $this->WxUserInfo_model->getInfoByOpenId($data['list'][$i]['g_openid']);
                 if($name){
                     $name=$name['U_name'];
                 }else{

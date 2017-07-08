@@ -16,7 +16,7 @@ class Fix extends CI_Controller
         $this->load->library('CI_Wechat');
         $this->load->helper('url');
         $this->load->model('Wxfixorder_model');
-        $this->load->model('Wxuserinfo_model');
+        $this->load->model('WxUserInfo_model');
         $this->load->model('Wxfixuser_model');
         $this->load->model('Wxfixorderfollow_model');
         $this->load->model('WxWeChatFunction_model');
@@ -49,7 +49,7 @@ class Fix extends CI_Controller
                 exit;
             }
             for($i=0;$i<count($data['list']);$i++){
-                $data['list'][$i]['userinfo'] = $this->Wxuserinfo_model->getuerinfobyopenid($data['list'][$i]['Fo_openid']);
+                $data['list'][$i]['userinfo'] = $this->WxUserInfo_model->getInfoByOpenId($data['list'][$i]['Fo_openid']);
             }
 //            print_r($data['list'][0]['userinfo']);
 //            exit;
@@ -75,7 +75,7 @@ class Fix extends CI_Controller
                 exit;
             }
             for($i=0;$i<count($data['list']);$i++){
-                $userinfo = $this->Wxuserinfo_model->getuerinfobyopenid($data['list'][$i]['Fo_openid']);
+                $userinfo = $this->WxUserInfo_model->getInfoByOpenId($data['list'][$i]['Fo_openid']);
                 $data['list'][$i]['userinfo']=$userinfo;
             }
         }$this->load->view('admin/handleinglist',$data);
@@ -93,7 +93,7 @@ class Fix extends CI_Controller
             $data['count']=$this->Wxfixorder_model->count('3');
             $data['curr']=$page;
             for($i=0;$i<count($data['list']);$i++){
-                $userinfo = $this->Wxuserinfo_model->getuerinfobyopenid($data['list'][$i]['Fo_openid']);
+                $userinfo = $this->WxUserInfo_model->getInfoByOpenId($data['list'][$i]['Fo_openid']);
                 $data['list'][$i]['userinfo']=$userinfo;
             }
         }$this->load->view('admin/handleedlist',$data);
@@ -177,8 +177,9 @@ class Fix extends CI_Controller
                 if ($this->transfer($Foid, '管理员分配维修人员', '0',$Fuid)) {
                     $this->Wxfixorder_model->updatestate($Foid, '2');
                     $fixinfo = $this->Wxfixorder_model->getfixinfobyid($Foid);
-                    $address = $this->Wxuserinfo_model->getuerinfobyopenid($fixinfo['Fo_openid'])['U_dormitory'];
-                    $this->WxWeChatFunction_model->sendFixInfoForFixUser($Foid, $fixinfo['Fo_openid'], $fixinfo['Fo_comment'], $fixinfo['Fo_time'], $address);
+                    $address = $this->WxUserInfo_model->getInfoByOpenId($fixinfo['Fo_openid'])['U_dormitory'];
+                    $Fu_openid = $this->Wxfixuser_model->getOpenIdById($Fuid);
+                    $this->WxWeChatFunction_model->sendFixInfoForFixUser($Foid, $Fu_openid, $fixinfo['Fo_comment'], $fixinfo['Fo_time'], $address);
                     $return = [
                         'state' => 1,
                         'message' => "成功",

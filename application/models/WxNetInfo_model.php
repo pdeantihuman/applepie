@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Time: 17:33
  * 开网信息表数据操作
  */
-class Wxnetinfo_model extends CI_Model
+class WxNetInfo_model extends CI_Model
 {
     function __construct()
     {
@@ -50,7 +50,7 @@ class Wxnetinfo_model extends CI_Model
      */
     public function add($data){
         $return = $this->db->insert('netinfo',$data);
-        return $return ? true : false;
+        return $this->db->affected_rows()>0;
     }
 
     /**
@@ -58,7 +58,7 @@ class Wxnetinfo_model extends CI_Model
      * @return bool
      * 获取开网状态
      */
-    public function getstate($openid){
+    public function getInfoByOpenId($openid){
         $this->db->where('N_openid',$openid);
         $this->db->select('N_state');
         $return = $this->db->get('netinfo')->row_array();
