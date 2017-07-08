@@ -222,6 +222,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+
                             <div class="mui-input-row">
                                 <label>留言</label>
                                 <input id="message" type="text" class="mui-input-clear" placeholder="留言">
@@ -238,6 +239,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <a class="mui-navigate-right" href="#">完成</a>
                     <div class="mui-collapse-content">
                         <form class="mui-input-group">
+                            <div class="mui-input-row">
+                                <label>留言</label>
+                                <input id="message" type="text" class="mui-input-clear" placeholder="留言">
+                            </div>
                             <div class="mui-button-row">
                                 <button id="overbtn" class="mui-btn mui-btn-primary" type="button">完成</button>
                             </div>

@@ -211,4 +211,31 @@ class Wxfixorderfollow_model extends CI_Model
         $return = $this->db->affected_rows()>0;
         return $return and $this->Wxfixorder_model->raisePriorityById($data['Fof_foid']);
     }
+    public function searchFixFollowResult($startDate,$endDate)
+    {
+        $this->db->where('Fof_time >',$startDate);
+        $this->db->where('Fof_time <',$endDate);
+        $this->db->where('Fof_result','2');
+        $this->db->select('Fof_fuOpenId,count(Fof_fuOpenId) as Result');
+        $this->db->group_by('Fof_fuOpenId');
+        return $this->db->get('fixOrderFollow')->result_array();
+    }
+    public function searchFixFollowReceive($startDate,$endDate){
+        $this->db->where('Fof_time >',$startDate);
+        $this->db->where('Fof_time <',$endDate);
+        $this->db->where('Fof_state','1');
+        $this->db->where('Fof_result','1');
+        $this->db->select('Fof_fuOpenId,count(Fof_fuOpenId) as Receive');
+        $this->db->group_by('Fof_fuOpenId');
+        return $this->db->get('fixOrderFollow')->result_array();
+    }
+    public function searchFixFollowTrans($startDate,$endDate){
+        $this->db->where('Fof_time >',$startDate);
+        $this->db->where('Fof_time <',$endDate);
+        $this->db->where('Fof_state','2');
+        $this->db->where('Fof_result','1');
+        $this->db->select('Fof_fuOpenId,count(Fof_fuOpenId) as Trans');
+        $this->db->group_by('Fof_fuOpenId');
+        return $this->db->get('fixOrderFollow')->result_array();
+    }
 }
