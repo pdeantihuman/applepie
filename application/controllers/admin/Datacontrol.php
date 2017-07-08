@@ -19,7 +19,7 @@ class Datacontrol extends CI_Controller
         $this->load->helper('url');
         $this->load->model('Readexcel_model');
         $this->load->model('Wxverification_model');
-        $this->load->model('Wxuserinfo_model');
+        $this->load->model('WxUserInfo_model');
     }
 
     /**
@@ -71,7 +71,7 @@ class Datacontrol extends CI_Controller
         if ($this->check_is_adminer()) {
             exit;
         } else {
-            $data = $this->Wxuserinfo_model->csv();
+            $data = $this->WxUserInfo_model->csv();
             $this->load->helper('download');
             $name = 'bind.txt';
             force_download($name, $data);

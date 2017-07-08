@@ -32,7 +32,7 @@ class Wxnewstag_model extends CI_Model
     public function listtag(){
         return $this->db->get('newstag')->result_array();
     }
-    public function getnamebyid($id){
+    public function getNameById($id){
         $this->db->where('Ntid',$id);
         $this->db->select('Nt_name');
         $return=$this->db->get('newstag')->row_array();

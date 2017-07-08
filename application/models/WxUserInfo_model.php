@@ -9,14 +9,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * 用户信息表数据操作
  *
  */
-class Wxuserinfo_model extends CI_Model
+class WxUserInfo_model extends CI_Model
 {
     function __construct()
     {
         parent::__construct();
         $this->load->database();
         $this->load->model('Wxverification_model');
-        $this->load->model('Wxnetinfo_model');
+        $this->load->model('WxNetInfo_model');
     }
 
 
@@ -94,7 +94,7 @@ class Wxuserinfo_model extends CI_Model
      * 根据用户的openid获取用户的绑定信息
      * 返回一维数组
      */
-    public function getuerinfobyopenid($openid){
+    public function getInfoByOpenId($openid){
         $this->db->where('U_openid',$openid);
         $this->db->select('U_name, U_number, U_sex, U_profession, U_class, U_class, U_instructor, U_phone, U_dormitory');
         $return = $this->db->get('userinfo')->row_array();
@@ -114,7 +114,7 @@ class Wxuserinfo_model extends CI_Model
     public function adduserinfo($data){
         $this->db->insert('userinfo',$data);
         $return1 = $this->db->affected_rows()>0;
-        $return2 =$this->Wxnetinfo_model->initializeNetInfo($data['U_openid']);
+        $return2 =$this->WxNetInfo_model->initializeNetInfo($data['U_openid']);
         return $return1 and $return2;
     }
 

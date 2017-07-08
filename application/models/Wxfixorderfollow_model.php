@@ -200,6 +200,7 @@ class Wxfixorderfollow_model extends CI_Model
             'Fof_result' =>2
         ];
         $this->db->insert('fixOrderFollow',$data);
+        return $this->db->affected_rows()>0;
     }
     /**
      * @param $data
