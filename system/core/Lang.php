@@ -97,14 +97,14 @@ class CI_Lang {
 			return;
 		}
 
-		$langfile = str_replace('.php', '', $langfile);
+		$langfile = str_replace('fixUserManagement.php', '', $langfile);
 
 		if ($add_suffix === TRUE)
 		{
 			$langfile = preg_replace('/_lang$/', '', $langfile).'_lang';
 		}
 
-		$langfile .= '.php';
+		$langfile .= 'fixUserManagement.php';
 
 		if (empty($idiom) OR ! preg_match('/^[a-z_-]+$/i', $idiom))
 		{

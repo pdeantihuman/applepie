@@ -212,31 +212,88 @@ class Wxfixorderfollow_model extends CI_Model
         $return = $this->db->affected_rows()>0;
         return $return and $this->Wxfixorder_model->raisePriorityById($data['Fof_foid']);
     }
-    public function searchFixFollowResult($startDate,$endDate)
+
+
+//    public function countCompletion($startDateTime,$endDateTime)
+//    {
+//        $this->db->where('Fof_time >',$startDateTime);
+//        $this->db->where('Fof_time <',$endDateTime);
+//        $this->db->where('Fof_result','2');
+//        $this->db->where('Fof_fuOpenId !=','0');
+//        $this->db->select('count(fixOrderFollow.Fof_fuOpenId) as Result');
+//        $this->db->group_by('Fof_fuOpenId');
+//        return $this->db->get('fixOrderFollow')->result_array();
+//    }
+
+
+    public function countFix($startDateTime, $endDateTime, $page = 1)
     {
-        $this->db->where('Fof_time >',$startDate);
-        $this->db->where('Fof_time <',$endDate);
-        $this->db->where('Fof_result','2');
-        $this->db->select('Fof_fuOpenId,count(Fof_fuOpenId) as Result');
-        $this->db->group_by('Fof_fuOpenId');
-        return $this->db->get('fixOrderFollow')->result_array();
+        return $this->db->query("
+SELECT
+  Fu_name,
+  U_number,
+  Receive,
+  Completed,
+  Transfer,
+  U_phone,
+  Fuid
+FROM (SELECT
+        Fu_name,
+        U_number,
+        Fu_openid,
+        U_phone,
+        Fu_state,
+        Fuid
+      FROM fixUser
+        INNER JOIN userinfo
+          ON Fu_openid = U_openid
+          WHERE Fu_state = 1) FixUserInfo
+  LEFT JOIN (SELECT
+               firstCount.OpenId,
+               Receive,
+               Completed,
+               Transfer
+             FROM (SELECT
+                     CountReceive.OpenId AS OpenId,
+                     Receive,
+                     Completed
+                   FROM
+                     (SELECT
+                        Fof_fuOpenId                       AS OpenId,
+                        COUNT(fixOrderFollow.Fof_fuOpenId) AS Receive
+                      FROM weixin.fixOrderFollow
+                      WHERE Fof_time >= '$startDateTime' AND Fof_time <= '$endDateTime' AND Fof_state = 1 AND
+                            Fof_result = 1 AND Fof_fuOpenId != '0'
+                      GROUP BY Fof_fuOpenId) CountReceive
+                     LEFT JOIN (SELECT
+                                  Fof_fuOpenId        AS OpenId,
+                                  COUNT(Fof_fuOpenId) AS Completed
+                                FROM weixin.fixOrderFollow
+                                WHERE Fof_time >= '$startDateTime' AND Fof_time <= '$endDateTime' AND Fof_state = 2 AND
+                                      Fof_result = 2 AND Fof_fuOpenId != '0'
+                                GROUP BY Fof_fuOpenId) CountCompletion
+                       ON CountReceive.OpenId = CountCompletion.OpenId) firstCount
+               LEFT JOIN (SELECT
+                            Fof_fuOpenId        AS OpenId,
+                            COUNT(Fof_fuOpenId) AS Transfer
+                          FROM weixin.fixOrderFollow
+                          WHERE Fof_time >= '$startDateTime' AND Fof_time <= '$endDateTime' AND Fof_state = 2 AND
+                                Fof_result = 1 AND Fof_fuOpenId != '0'
+                          GROUP BY Fof_fuOpenId) countTransfer
+                 ON firstCount.OpenId = countTransfer.OpenId) b
+    ON FixUserInfo.Fu_openid = b.OpenId;
+    ")->result_array();
     }
-    public function searchFixFollowReceive($startDate,$endDate){
-        $this->db->where('Fof_time >',$startDate);
-        $this->db->where('Fof_time <',$endDate);
-        $this->db->where('Fof_state','1');
-        $this->db->where('Fof_result','1');
-        $this->db->select('Fof_fuOpenId,count(Fof_fuOpenId) as Receive');
-        $this->db->group_by('Fof_fuOpenId');
-        return $this->db->get('fixOrderFollow')->result_array();
-    }
-    public function searchFixFollowTrans($startDate,$endDate){
-        $this->db->where('Fof_time >',$startDate);
-        $this->db->where('Fof_time <',$endDate);
-        $this->db->where('Fof_state','2');
-        $this->db->where('Fof_result','1');
-        $this->db->select('Fof_fuOpenId,count(Fof_fuOpenId) as Trans');
-        $this->db->group_by('Fof_fuOpenId');
-        return $this->db->get('fixOrderFollow')->result_array();
-    }
+
+
+//    public function countTrans($startDateTime,$endDateTime){
+//        $this->db->where('Fof_time >',$startDateTime);
+//        $this->db->where('Fof_time <',$endDateTime);
+//        $this->db->where('Fof_state','2');
+//        $this->db->where('Fof_result','1');
+//        $this->db->where('Fof_fuOpenId !=','0');
+//        $this->db->select('count(fixOrderFollow.Fof_fuOpenId) as Transfer');
+//        $this->db->group_by('Fof_fuOpenId');
+//        return $this->db->get('fixOrderFollow')->result_array();
+//    }
 }

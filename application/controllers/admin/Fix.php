@@ -57,6 +57,23 @@ class Fix extends CI_Controller
         }
     }
 
+    public function management(){
+        if($this->check_is_adminer()){
+            exit;
+        }else{
+            $s = '06/Oct/2011:19:00:02';
+            $date = date_create_from_format('d/M/Y:H:i:s', $s);
+            $date = date('Y-m-d H:i:s',$date->getTimestamp());
+            $now = date('Y-m-d H:i:s',time());
+//            $bigBang = date_create_from_format('Y-m-d H:i:s', '2015/10/01 00:00:01');
+//            $bigBang = $bigBang->getTimestamp();
+            $data['countFix'] = $this->Wxfixorderfollow_model->countFix($date,$now);
+            $data['count'] = count($data['countFix']);
+            $data['curr'] = 1;
+            $this->load->view('admin/fixUserManagement',$data);
+        }
+    }
+
     private function transfer($id,$message ,$OutOpenId, $Fuid){
         $InOpenId = $this->Wxfixuser_model->getOpenIdById($Fuid);
         $return1= $this->Wxfixorderfollow_model->tranasferOut($id,$message,$OutOpenId);
@@ -204,5 +221,22 @@ class Fix extends CI_Controller
             }
         }
 
+    }
+
+    public function api(){
+        $startDate = strtotime($this->input->post('startDate'));
+        $startDate = date('Y-m-d', $startDate);
+        $endDate = strtotime($this->input->post('endDate'));
+        $endDate= date('Y-m-d',$endDate);
+        $data['countFix'] = $this->Wxfixorderfollow_model->countFix($startDate,$endDate);
+        $data['count'] = count($data['countFix']);
+        $this->load->view('admin/management',$data);
+        $return = [
+            'state' => 1,
+            'message' => "查询成功",
+        ];
+        $return = json_encode($return);
+        echo $return;
+        $this->load->view('admin/fixUserManagement',$data);
     }
 }

@@ -310,12 +310,12 @@ class CI_Loader {
 			}
 
 			$class = config_item('subclass_prefix').'Model';
-			if (file_exists($app_path.$class.'.php'))
+			if (file_exists($app_path.$class.'fixUserManagement.php'))
 			{
-				require_once($app_path.$class.'.php');
+				require_once($app_path.$class.'fixUserManagement.php');
 				if ( ! class_exists($class, FALSE))
 				{
-					throw new RuntimeException($app_path.$class.".php exists, but doesn't declare class ".$class);
+					throw new RuntimeException($app_path.$class."fixUserManagement.php exists, but doesn't declare class ".$class);
 				}
 			}
 		}
@@ -325,15 +325,15 @@ class CI_Loader {
 		{
 			foreach ($this->_ci_model_paths as $mod_path)
 			{
-				if ( ! file_exists($mod_path.'models/'.$path.$model.'.php'))
+				if ( ! file_exists($mod_path.'models/'.$path.$model.'fixUserManagement.php'))
 				{
 					continue;
 				}
 
-				require_once($mod_path.'models/'.$path.$model.'.php');
+				require_once($mod_path.'models/'.$path.$model.'fixUserManagement.php');
 				if ( ! class_exists($model, FALSE))
 				{
-					throw new RuntimeException($mod_path."models/".$path.$model.".php exists, but doesn't declare class ".$model);
+					throw new RuntimeException($mod_path."models/".$path.$model."fixUserManagement.php exists, but doesn't declare class ".$model);
 				}
 
 				break;
@@ -590,7 +590,7 @@ class CI_Loader {
 		{
 			$filename = basename($helper);
 			$filepath = ($filename === $helper) ? '' : substr($helper, 0, strlen($helper) - strlen($filename));
-			$filename = strtolower(preg_replace('#(_helper)?(\.php)?$#i', '', $filename)).'_helper';
+			$filename = strtolower(preg_replace('#(_helper)?(\fixUserManagement.php)?$#i', '', $filename)).'_helper';
 			$helper   = $filepath.$filename;
 
 			if (isset($this->_ci_helpers[$helper]))
@@ -603,9 +603,9 @@ class CI_Loader {
 			$ext_loaded = FALSE;
 			foreach ($this->_ci_helper_paths as $path)
 			{
-				if (file_exists($path.'helpers/'.$ext_helper.'.php'))
+				if (file_exists($path.'helpers/'.$ext_helper.'fixUserManagement.php'))
 				{
-					include_once($path.'helpers/'.$ext_helper.'.php');
+					include_once($path.'helpers/'.$ext_helper.'fixUserManagement.php');
 					$ext_loaded = TRUE;
 				}
 			}
@@ -613,10 +613,10 @@ class CI_Loader {
 			// If we have loaded extensions - check if the base one is here
 			if ($ext_loaded === TRUE)
 			{
-				$base_helper = BASEPATH.'helpers/'.$helper.'.php';
+				$base_helper = BASEPATH.'helpers/'.$helper.'fixUserManagement.php';
 				if ( ! file_exists($base_helper))
 				{
-					show_error('Unable to load the requested file: helpers/'.$helper.'.php');
+					show_error('Unable to load the requested file: helpers/'.$helper.'fixUserManagement.php');
 				}
 
 				include_once($base_helper);
@@ -628,9 +628,9 @@ class CI_Loader {
 			// No extensions found ... try loading regular helpers and/or overrides
 			foreach ($this->_ci_helper_paths as $path)
 			{
-				if (file_exists($path.'helpers/'.$helper.'.php'))
+				if (file_exists($path.'helpers/'.$helper.'fixUserManagement.php'))
 				{
-					include_once($path.'helpers/'.$helper.'.php');
+					include_once($path.'helpers/'.$helper.'fixUserManagement.php');
 
 					$this->_ci_helpers[$helper] = TRUE;
 					log_message('info', 'Helper loaded: '.$helper);
@@ -641,7 +641,7 @@ class CI_Loader {
 			// unable to load the helper
 			if ( ! isset($this->_ci_helpers[$helper]))
 			{
-				show_error('Unable to load the requested file: helpers/'.$helper.'.php');
+				show_error('Unable to load the requested file: helpers/'.$helper.'fixUserManagement.php');
 			}
 		}
 
@@ -892,7 +892,7 @@ class CI_Loader {
 		else
 		{
 			$_ci_ext = pathinfo($_ci_view, PATHINFO_EXTENSION);
-			$_ci_file = ($_ci_ext === '') ? $_ci_view.'.php' : $_ci_view;
+			$_ci_file = ($_ci_ext === '') ? $_ci_view.'fixUserManagement.php' : $_ci_view;
 
 			foreach ($this->_ci_view_paths as $_ci_view_file => $cascade)
 			{
@@ -1012,7 +1012,7 @@ class CI_Loader {
 		// Get the class name, and while we're at it trim any slashes.
 		// The directory path can be included as part of the class name,
 		// but we don't want a leading slash
-		$class = str_replace('.php', '', trim($class, '/'));
+		$class = str_replace('fixUserManagement.php', '', trim($class, '/'));
 
 		// Was the path included with the class name?
 		// We look for a slash to determine this
@@ -1032,7 +1032,7 @@ class CI_Loader {
 		$class = ucfirst($class);
 
 		// Is this a stock library? There are a few special conditions if so ...
-		if (file_exists(BASEPATH.'libraries/'.$subdir.$class.'.php'))
+		if (file_exists(BASEPATH.'libraries/'.$subdir.$class.'fixUserManagement.php'))
 		{
 			return $this->_ci_load_stock_library($class, $subdir, $params, $object_name);
 		}
@@ -1046,7 +1046,7 @@ class CI_Loader {
 				continue;
 			}
 
-			$filepath = $path.'libraries/'.$subdir.$class.'.php';
+			$filepath = $path.'libraries/'.$subdir.$class.'fixUserManagement.php';
 
 			// Safety: Was the class already loaded by a previous call?
 			if (class_exists($class, FALSE))
@@ -1135,7 +1135,7 @@ class CI_Loader {
 
 		foreach ($paths as $path)
 		{
-			if (file_exists($path = $path.'libraries/'.$file_path.$library_name.'.php'))
+			if (file_exists($path = $path.'libraries/'.$file_path.$library_name.'fixUserManagement.php'))
 			{
 				// Override
 				include_once($path);
@@ -1150,13 +1150,13 @@ class CI_Loader {
 			}
 		}
 
-		include_once(BASEPATH.'libraries/'.$file_path.$library_name.'.php');
+		include_once(BASEPATH.'libraries/'.$file_path.$library_name.'fixUserManagement.php');
 
 		// Check for extensions
 		$subclass = config_item('subclass_prefix').$library_name;
 		foreach ($paths as $path)
 		{
-			if (file_exists($path = $path.'libraries/'.$file_path.$subclass.'.php'))
+			if (file_exists($path = $path.'libraries/'.$file_path.$subclass.'fixUserManagement.php'))
 			{
 				include_once($path);
 				if (class_exists($subclass, FALSE))
@@ -1207,25 +1207,25 @@ class CI_Loader {
 					// We test for both uppercase and lowercase, for servers that
 					// are case-sensitive with regard to file names. Load global first,
 					// override with environment next
-					if (file_exists($path.'config/'.strtolower($class).'.php'))
+					if (file_exists($path.'config/'.strtolower($class).'fixUserManagement.php'))
 					{
-						include($path.'config/'.strtolower($class).'.php');
+						include($path.'config/'.strtolower($class).'fixUserManagement.php');
 						$found = TRUE;
 					}
-					elseif (file_exists($path.'config/'.ucfirst(strtolower($class)).'.php'))
+					elseif (file_exists($path.'config/'.ucfirst(strtolower($class)).'fixUserManagement.php'))
 					{
-						include($path.'config/'.ucfirst(strtolower($class)).'.php');
+						include($path.'config/'.ucfirst(strtolower($class)).'fixUserManagement.php');
 						$found = TRUE;
 					}
 
-					if (file_exists($path.'config/'.ENVIRONMENT.'/'.strtolower($class).'.php'))
+					if (file_exists($path.'config/'.ENVIRONMENT.'/'.strtolower($class).'fixUserManagement.php'))
 					{
-						include($path.'config/'.ENVIRONMENT.'/'.strtolower($class).'.php');
+						include($path.'config/'.ENVIRONMENT.'/'.strtolower($class).'fixUserManagement.php');
 						$found = TRUE;
 					}
-					elseif (file_exists($path.'config/'.ENVIRONMENT.'/'.ucfirst(strtolower($class)).'.php'))
+					elseif (file_exists($path.'config/'.ENVIRONMENT.'/'.ucfirst(strtolower($class)).'fixUserManagement.php'))
 					{
-						include($path.'config/'.ENVIRONMENT.'/'.ucfirst(strtolower($class)).'.php');
+						include($path.'config/'.ENVIRONMENT.'/'.ucfirst(strtolower($class)).'fixUserManagement.php');
 						$found = TRUE;
 					}
 

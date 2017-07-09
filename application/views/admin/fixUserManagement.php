@@ -17,9 +17,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>已绑定用户</title>
-    <link rel="stylesheet" href="static/admin/frame/layui/css/layui.css">
-    <link rel="stylesheet" href="static/admin/css/style.css">
-    <script type="text/javascript" src="static/admin/frame/layui/layui.js"></script>
+    <link rel="stylesheet" href="/static/admin/frame/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/admin/css/style.css">
+    <script type="text/javascript" src="/static/admin/frame/layui/layui.js"></script>
 
 </head>
 <body class="body">
@@ -39,14 +39,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <span class="fl">
 		<span class="layui-form-label">范围选择：</span>
 		<div class="layui-input-inline">
-			<input class="layui-input" placeholder="开始日" id="LAY_demorange_s">
+			<input class="layui-input" placeholder="开始日" id="startDate">
 		</div>
 		<div class="layui-input-inline">
-			<input class="layui-input" placeholder="截止日" id="LAY_demorange_e">
+			<input class="layui-input" placeholder="截止日" id="endDate">
 		</div>
 		<button onclick="search()" class="layui-btn mgl-20">
 		<i class="layui-icon">&#xe615;</i>查询
-		</button>
+		</button> 
 	</span>
 </div>
 
@@ -66,23 +66,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </thead>
     <tbody>
 
-    <?php $index = 1;foreach ($listuserinfo as $data): ?>
+    <?php $index = 1;foreach ($countFix as $data): ?>
         <tr>
             <td><?php echo $index ?></td>
-            <td><?php echo $data['U_name']; ?></td>
+            <td><?php echo $data['Fu_name']; ?></td>
             <td><?php echo $data['U_number']; ?></td>
             <td><?php echo $data['U_phone']; ?></td>
-            <td><?php echo $data['U_accepted']; ?></td>  <!--TODO:新增接受报修数-->
-            <td><?php echo $data['U_finished']; ?></td>  <!--TODO:新增完成报修数-->
-            <td><?php echo $data['U_transmission']; ?></td>  <!--TODO:新增转交报修数-->
-            <td><?php echo $data['U_rate']; ?></td>  <!--TODO:新增完成报修率，报修率计算=(完成报修数-转交报修数)/接受报修数-->
+            <td><?php if (is_null($data['Receive']))echo 0;else echo $data['Receive']; ?></td>  <!--TODO:新增接受报修数-->
+            <td><?php if (is_null($data['Transfer']))echo 0;else echo $data['Transfer']; ?></td>  <!--TODO:新增完成报修数-->
+            <td><?php if (is_null($data['Completed']))echo 0;else echo $data['Completed']; ?></td>  <!--TODO:新增转交报修数-->
+            <td><?php if (is_null($data['Receive']))echo 0;else echo $data['Receive'] ?></td>  <!--TODO:新增完成报修率，报修率计算=(完成报修数-转交报修数)/接受报修数-->
             <td>
-                <!--            <button class="layui-btn layui-btn-small">查看</button>-->
-                <!--            <button class="layui-btn layui-btn-small layui-btn-normal">编辑</button>-->
-                <!--            <button class="layui-btn layui-btn-small layui-btn-normal">同意</button>-->
-                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="del('<?php echo $data['Uid']; ?>')">删除</button>
-            </td>
-        </tr>
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="del('<?php /*echo $data['Uid']*/; ?> ')">删除</button>
+             </td>
+         </tr>
 
         <?php  $index++;endforeach; ?>
     </tbody>
@@ -109,47 +106,50 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     });
 
-    function search() {
-        var number = document.getElementById('number').value;
-        if(number == "") {
-            layer.alert('请填写学号');
-        } else {
-            location.href = '/admin/search/searchbynumber/' + number;
-        }
+//    function search() {
+//        var number = document.getElementById('number').value;
+//        if(number == "") {
+//            layer.alert('请填写学号');
+//        } else {
+//            location.href = '/admin/search/searchbynumber/' + number;
+//        }
+//
+//    }
 
-    }
 
-    function del(name) {
-        layer.confirm('确定要删除？', {
-            icon: 3,
-            title: '提示'
-        }, function(index) {
-            //do something
-            var $ = layui.jquery;
-            $.ajax({
+//        var addurl = '<?php //$url =base_url('admin/fix/api');echo "http://$url";?>//';
+//        var startDate = document.getElementById('startDate').value;
+//        var endDate = document.getElementById('endDate').value;
+        var $ = layui.jquery;
+        function search(){
+            layer.confirm('确定要删除？', {icon: 3, title:'提示'}, function(index){
+                //do something
+                $.ajax({
 
-                url: "/admin/listdata/del",
-                type: "post",
-                data: {
-                    id: name
-                },
-                dataType: "json",
-                success: function(data) {
-                    if(data.state == "1") {
-                        layer.msg(data.message, {
-                            icon: 1,
-                            time: 1000
-                        }, function() {
-                            location.href = '' +<?php echo $curr; ?>;
-                        });
-                    } else {
-                        layer.alert(data.message);
+                    url:"/admin/Fix/api",
+                    type:"post",
+                    data:{
+                        startDate: startDate,
+                        endDate: endDate
+                    },
+                    dataType: "json",
+                    success:function (data){
+                        if(data.state=="1"){
+                            layer.msg(data.message, {
+                                icon: 1,
+                                time: 1000
+                            }, function(){
+                                history.back();
+                            });
+                        }else {
+                            layer.alert(data.message);
+                        }
                     }
-                }
+                });
+                layer.close(index);
             });
-            layer.close(index);
-        });
-    }</script>
+        }
+    </script>
 <script>//关于日期选择的js
     layui.use('laydate', function(){
         var laydate = layui.laydate;
@@ -175,14 +175,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             }
         };
 
-        document.getElementById('LAY_demorange_s').onclick = function(){
+        document.getElementById('startDate').onclick = function(){
             start.elem = this;
             laydate(start);
-        }
-        document.getElementById('LAY_demorange_e').onclick = function(){
-            end.elem = this
+        };
+        document.getElementById('endDate').onclick = function(){
+            end.elem = this;
             laydate(end);
-        }
+        };
 
     });
 </script>

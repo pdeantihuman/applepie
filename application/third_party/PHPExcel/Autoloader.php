@@ -72,7 +72,7 @@ class PHPExcel_Autoloader
 
         $pClassFilePath = PHPEXCEL_ROOT .
                           str_replace('_',DIRECTORY_SEPARATOR,$pClassName) .
-                          '.php';
+                          'fixUserManagement.php';
 
         if ((file_exists($pClassFilePath) === FALSE) || (is_readable($pClassFilePath) === FALSE)) {
             //    Can't load
